@@ -1,12 +1,12 @@
 # EndpointSecurityLab
 
-Windows endpoint security portfolio lab covering kernel/user-mode telemetry, DLP/device control, app-control, injected sensors, browser/mail integration, syscalls, and hypervisor-assisted techniques.
+Windows endpoint security portfolio lab covering ETW-based telemetry, kernel/user-mode telemetry, DLP/device control, app-control, injected sensors, browser/mail integration, syscalls, and hypervisor-assisted techniques.
 
 ## Scope
 
 This repository contains a reusable Windows endpoint security foundation:
 
-* shared Visual Studio / WDK build infrastructure
+* Visual Studio / WDK build infrastructure
 * test-signing support
 * kernel utility libraries
 * shared user/kernel utility code
@@ -33,7 +33,11 @@ This helps test low-level logic before running it inside a driver.
 
 Future modules may include:
 
-* file-system minifilter telemetry/enforcement
+**Telemetry / visibility**
+* ETW-based telemetry
+
+**Control / enforcement**
+* file-system minifilter
 * WFP/network filtering
 * application control
 * injected user-mode sensors
