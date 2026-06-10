@@ -1,0 +1,38 @@
+;;;
+;;; SecLabDlp
+;;;
+
+[Version]
+Signature   = "$Windows NT$"
+Class       = EpSecLab
+ClassGuid   = {17927B9D-6D0B-4B81-A237-E2CF578D73AC}
+Provider    = %CompanyName%
+PnpLockdown=1
+
+CatalogFile=SecLabDlp.cat
+CatalogFile.NTX86 =SecLabDlp.cat
+ 
+[DestinationDirs]
+DefaultDestDir         = 12
+
+;;
+;; Default install sections
+;;
+
+[DefaultInstall.NTX86]
+OptionDesc = %DriverName%
+CopyFiles = DriverCopyFiles
+
+[SourceDisksNames]
+1 = %DiskName%
+
+[DriverCopyFiles]
+SecLabDlp.sys
+
+[SourceDisksFiles]
+SecLabDlp.sys = 1
+
+[Strings]
+DiskName                    = "SecLabDlp Installation Disk"
+CompanyName                 = "Ephraim Neuberger"
+DriverName                  = "SecLabDlp"

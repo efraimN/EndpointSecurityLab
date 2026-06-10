@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<!-- 
+Copyright (c) 2026 - present, Ephraim Neuberger. All rights reserved.
+
+The code and materials provided by Ephraim Neuberger are for non-commercial testing and evaluation purposes only.
+Ephraim Neuberger reserves all rights not expressly granted.
+
+Any permitted copy must retain this copyright notice and disclaimer.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL EPHRAIM NEUBERGER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ -->
+	<PropertyGroup Label="UserMacros">
+    <BuildOutput>$(SolutionDir)Output\$(Configuration)\$(Platform)\</BuildOutput>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(BuildOutput)obj\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(TargetExt)'=='.lib'">$(BuildOutput)lib\</OutDir>
+    <OutDir Condition="'$(TargetExt)'=='.slib'">$(BuildOutput)lib\</OutDir>
+    <OutDir Condition="'$(TargetExt)'!='.lib'">$(BuildOutput)main\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <GenerateManifest>false</GenerateManifest>
+    <LinkIncremental>false</LinkIncremental>
+    <FILE__NAME>%(Filename)%(Extension)</FILE__NAME>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(DriverType)'!=''">
+    <!-- if $(DriverType) has a value (ussually WDM) is a kernel mode component -->
+    <EnableInf2cat>false</EnableInf2cat>
+    <SignMode>Off</SignMode>
+    <TargetExt Condition="'$(ConfigurationType)'=='StaticLibrary'">.slib</TargetExt>
+  </PropertyGroup>
+	<ItemDefinitionGroup>
+	<MASM>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <EnableAssemblyGeneratedCodeListing>true</EnableAssemblyGeneratedCodeListing>
+      <UseSafeExceptionHandlers Condition="'$(PlatformTarget)'=='x86'">true</UseSafeExceptionHandlers>
+      <ListAllAvailableInformation>true</ListAllAvailableInformation>
+      <AddFirstPassListing>true</AddFirstPassListing>
+      <AssembledCodeListingFile>$(IntDir)%(Filename)</AssembledCodeListingFile>
+    </MASM>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(IntDir);$(ProjectDir);$(SolutionDir)UserCommon\Includes;$(SolutionDir)BuildInfra\Includes;$(SolutionDir)KernelUserCommon\Includes;$(SolutionDir)KernelUserCommon\Includes\IUserKernelUtils;$(SolutionDir)3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(DriverType)'!=''">$(SolutionDir)Drivers\KernelLibs\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <SDLCheck>true</SDLCheck>
+      <MinimalRebuild>false</MinimalRebuild>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>VERSION_MAJOR=$(VERSION_MAJOR);VERSION_MINOR=$(VERSION_MINOR);VERSION_HOTFIX=$(VERSION_HOTFIX);VERSION_BUILD=$(VERSION_BUILD);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SOLUTION_DIR=$(SolutionDir.Replace('\', '\\')).;INT_DIR=$(IntDir.Replace('\', '\\')).;WPP_FRIENDLY_NAME=$(TargetName);TARGET_NAME=$(TargetName)$(TargetExt);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FILE__NAME=$(FILE__NAME);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(PlatformTarget)'=='x86'">OS_VERSION=I386;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(PlatformTarget)'=='x64'">OS_VERSION=X64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(DriverType)'!=''">POOL_NX_OPTIN=1;KERNEL;__KERNEL__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="('$(DriverType)'!='') and ('$(Configuration)'=='Debug')">DBG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="('$(DriverType)'=='') and ('$(Configuration)'=='Debug')">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="('$(DriverType)'=='') and ('$(Configuration)'=='Release')">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="('$(DriverType)'=='') and ('$(Platform)'=='Win32')">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="('$(DriverType)'=='') and ('$(TargetExt)'=='.lib')">_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="('$(DriverType)'=='') and ('$(Configuration)'=='Debug')">StackFrameRuntimeCheck</BasicRuntimeChecks>
+      <BasicRuntimeChecks Condition="('$(DriverType)'=='') and ('$(Configuration)'=='Release')">
+      </BasicRuntimeChecks>
+      <BasicRuntimeChecks Condition="('$(DriverType)'!='')">
+      </BasicRuntimeChecks>
+      <Optimization Condition="('$(DriverType)'=='') and ('$(Configuration)'=='Debug')">
+      </Optimization>
+      <Optimization Condition="('$(DriverType)'=='') and ('$(Configuration)'=='Release')">MaxSpeed</Optimization>
+      <Optimization Condition="'$(DriverType)'!=''">MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MultiProcessorCompilation Condition="'$(DriverType)'==''">true</MultiProcessorCompilation>
+      <RuntimeLibrary Condition="'$(Configuration)'=='Release'">MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)'=='Debug'">MultiThreadedDebugDLL</RuntimeLibrary>
+      <CompileAs>Default</CompileAs>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <!-- <AdditionalOptions >/Zc:threadSafeInit- /JMC- %(AdditionalOptions)</AdditionalOptions> -->
+      <AdditionalOptions Condition="'$(DriverType)'==''">/d2Zi+ /MP16 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(DriverType)'!=''">/KERNEL /d2Zi+ /MP16 %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo Condition="'$(DriverType)'==''">true</RuntimeTypeInfo>
+      <RuntimeTypeInfo Condition="'$(DriverType)'!=''">false</RuntimeTypeInfo>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <AssemblerOutput>All</AssemblerOutput>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
+      <ProgramDatabaseFile>$(BuildOutput)sym\$(TargetName).pdb</ProgramDatabaseFile>
+      <StripPrivateSymbols>$(BuildOutput)sym\$(TargetName)NoSymbols.pdb</StripPrivateSymbols>
+      <AdditionalLibraryDirectories>$(BuildOutput)lib;$(LibraryPath);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <MapFileName>$(BuildOutput)obj\$(TargetName)\$(TargetName).map</MapFileName>
+      <GenerateMapFile>true</GenerateMapFile>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>$(BuildOutput)lib\$(TargetName).lib</ImportLibrary>
+      <MapExports>true</MapExports>
+      <ImageHasSafeExceptionHandlers Condition="'$(PlatformTarget)'=='x86'">true</ImageHasSafeExceptionHandlers>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalOptions Condition="'$(DriverType)'!=''">/INTEGRITYCHECK  /kernel /ignore:4210 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies Condition="'$(DriverType)'!=''">KernelCrtLib.slib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Lib>
+      <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
+    </Lib>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)BuildInfra\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>VERSION_MAJOR=$(VERSION_MAJOR);VERSION_MINOR=$(VERSION_MINOR);VERSION_HOTFIX=$(VERSION_HOTFIX);VERSION_BUILD=$(VERSION_BUILD);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TARGET_NAME=$(TargetName)$(TargetExt);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(PlatformTarget)'=='x86'">OS_VERSION=I386;__IX86__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(PlatformTarget)'=='x64'">OS_VERSION=X64;__IX64__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='Release'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)'=='Debug'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <!-- The TARGET_EXT will be used on the version resource building, to set the VER_FILESUBTYPE and the VER_FILETYPE -->
+      <PreprocessorDefinitions Condition="'$(TargetExt)'=='.dll'">TARGET_EXT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(TargetExt)'=='.exe'">TARGET_EXT=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(TargetExt)'=='.sys'">TARGET_EXT=3;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions> /l 0x0 %(AdditionalOptions)</AdditionalOptions>
+    </ResourceCompile>
+    <BuildLog>
+      <Path>$(IntDir)$(TargetName).log</Path>
+    </BuildLog>
+    <PostBuildEvent Condition="('$(TargetExt)'=='.sys') or ('$(TargetExt)'=='.exe') or ('$(TargetExt)'=='.dll')">
+      <Command>call $(SolutionDir)Signing\Sign.bat $(OutDir)$(TargetName)$(TargetExt)
+IF %ERRORLEVEL% NEQ 0 exit %ERRORLEVEL%</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="BuildOutput">
+      <Value>$(BuildOutput)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
