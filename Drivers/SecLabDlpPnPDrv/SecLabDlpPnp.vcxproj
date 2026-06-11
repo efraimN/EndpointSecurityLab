@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5E907F87-9A9E-4F88-ABFA-591A44662015}</ProjectGuid>
-    <ProjectName>SecLabDlp</ProjectName>
+    <ProjectName>SecLabDlpPnP</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
@@ -107,15 +107,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SecLabDlp.cpp" />
-    <ClCompile Include="SecLabDlpDriverObject.cpp" />
+    <ClCompile Include="SecLabDlpPnp.cpp" />
+    <ClCompile Include="SecLabDlpPnpDriverObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DevFilter\DevFilter.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Resources\Resource.h" />
-    <ClInclude Include="SecLabDlp.h" />
-    <ClInclude Include="SecLabDlpDriverObject.h" />
+    <ClInclude Include="SecLabDlpPnp.h" />
+    <ClInclude Include="SecLabDlpPnPDriverObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc1">
@@ -126,11 +126,11 @@
     <None Include="Resources\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="InfX86\SecLabDlp.inx">
+    <Inf Include="InfX86\SecLabDlpPnp.inx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Inf>
-    <Inf Include="SecLabDlp.inx">
+    <Inf Include="SecLabDlpPnp.inx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </Inf>

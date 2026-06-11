@@ -17,8 +17,8 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <DriverEntryLib.h>
 
-#include "SecLabDlpDriverObject.h"
-#include "SecLabDlp.h"
+#include "SecLabDlpPnPDriverObject.h"
+#include "SecLabDlpPnP.h"
 
 BOOLEAN G_ShouldStopWpp = TRUE;
 
