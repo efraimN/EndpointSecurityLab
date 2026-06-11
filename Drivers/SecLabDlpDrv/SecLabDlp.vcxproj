@@ -107,15 +107,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SecLabDlp.cpp" />
     <ClCompile Include="SecLabDlpDriverObject.cpp" />
-    <ClCompile Include="SecLabDlpDrv.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DevFilter\DevFilter.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Resources\Resource.h" />
+    <ClInclude Include="SecLabDlp.h" />
     <ClInclude Include="SecLabDlpDriverObject.h" />
-    <ClInclude Include="SecLabDlpDrv.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc1">

@@ -68,6 +68,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DeviceObject.cpp" />
     <ClCompile Include="DriverEntry.cpp" />
     <ClCompile Include="DriverObject.cpp" />
     <ClCompile Include="Precompiled.cpp">

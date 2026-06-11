@@ -18,7 +18,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <DriverEntryLib.h>
 
 #include "SecLabDlpDriverObject.h"
-#include "SecLabDlpDrv.h"
+#include "SecLabDlp.h"
 
 BOOLEAN G_ShouldStopWpp = TRUE;
 
@@ -55,6 +55,8 @@ DriverEntry(
 	return DriverEntryLib::Main(
 		DriverObject, 
 		RegistryPath, 
+		ORIGINALFILENAME,
+		VER_FILEVERSION_STR,
 		CMyDriverObject::GetInstance,
 		StartDebuggerTracer,
 		StopDebuggerTracer

@@ -18,6 +18,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <DriverEntryLib.h>
 #include "SecLabDlpDriverObject.h"
 
+#include "DevFilter\DevFilter.h"
 
 
 IDriverObject* IDriverObject::GetInstance()
@@ -36,6 +37,13 @@ NTSTATUS CMyDriverObject::DoStartStop(BOOL Start_Stop)
 
 		status = STATUS_INSUFFICIENT_RESOURCES;
 
+		if (Start_Stop)
+		{
+			DriverEntryLib::G_DriverObject->DriverExtension->AddDevice = DevFilter::AddDevice;
+		}
+		else
+		{
+		}
 
 		status = STATUS_SUCCESS;
 		goto Leave;
@@ -75,7 +83,13 @@ CMyDriverObject::MajorFunctionDispatcher(
 	};
 	PROC_ENTRY;
 
-	UNREFERENCED_PARAMETER(DeviceObject);
+	BasicDriverDevice* pMyDevices;
+
+	pMyDevices = (BasicDriverDevice*)DeviceObject->DeviceExtension;
+	if (pMyDevices->m_Signature == MY_FILTER_DEVICES_SIGNATURE)
+	{
+		return ((DevFilter*)pMyDevices)->MajorFunctionDispatcher(Irp);
+	}
 
 	ESL_DBG_OUT(DBG_ERROR, ("Returning STATUS_INVALID_DEVICE_REQUEST the DeviceObject is invalid"));
 	Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;

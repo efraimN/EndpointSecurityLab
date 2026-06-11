@@ -30,10 +30,15 @@ PDRIVER_OBJECT DriverEntryLib::G_DriverObject;
 static
 DriverEntryLib::pfnStopDebuggerTracer s_StopDebuggerTracer;
 
+static
+CHAR G_DriverFileName[256];
+
 NTSTATUS
 DriverEntryLib::Main(
 	IN PDRIVER_OBJECT DriverObject,
 	IN PUNICODE_STRING RegistryPath,
+	IN PCHAR DriverFileName,
+	IN PCHAR DriverFileVersion,
 	IN decltype(IDriverObject::GetInstance)* DriverObjectInstance,
 	pfnStartDebuggerTracer StartDebuggerTracer,
 	pfnStopDebuggerTracer StopDebuggerTracer
@@ -76,8 +81,8 @@ DriverEntryLib::Main(
 		};
 		PROC_ENTRY;
 
-		ESL_DBG_OUT(DBG_INFO, "Driver Name %s Driver Build Date: %s Time: %s Version %s", ORIGINALFILENAME, __DATE__, __TIME__, VER_FILEVERSION_STR);
-
+		RtlCopyMemory(G_DriverFileName, DriverFileName, MIN(256, strlen(DriverFileName)+1));
+		ESL_DBG_OUT(DBG_INFO, "Driver Name %s Driver Build Date: %s Time: %s Version %s", G_DriverFileName, __DATE__, __TIME__, DriverFileVersion);
 		CrtInit();
 		
 		status = DriverObjectImp::GetInstance()->DriverObjectMain(RegistryPath, DriverObjectInstance());
@@ -120,7 +125,7 @@ void DriverExitInternal(IN PDRIVER_OBJECT DriverObject)
 	DriverObjectImp::GetInstance()->DriverExit();
 
 	CrtExit();
-	ESL_DBG_OUT(DBG_INFO, "------- " ORIGINALFILENAME " Driver Exit Finished-------- - ");
+	ESL_DBG_OUT(DBG_INFO, "------- %s Driver Exit Finished --------- ", G_DriverFileName);
 }
 
 static

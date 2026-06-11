@@ -45,8 +45,7 @@ class BasicDriverDevice
 public:
 
 	static
-
-		void* __cdecl operator new(size_t nSize, PDRIVER_OBJECT DriverObject, BOOLEAN Exclusive = FALSE, wchar_t* pDeviceName = NULL, DEVICE_TYPE Type = FILE_DEVICE_UNKNOWN);
+	void* __cdecl operator new(size_t nSize, PDRIVER_OBJECT DriverObject, BOOLEAN Exclusive = FALSE, wchar_t* pDeviceName = NULL, DEVICE_TYPE Type = FILE_DEVICE_UNKNOWN);
 	void __cdecl operator delete(void* p);
 	BasicDriverDevice(UINT32 Signature);
 	virtual ~BasicDriverDevice();
@@ -66,6 +65,7 @@ protected:
 // This is the driver entry code
 namespace DriverEntryLib
 {
+	// To be implemented in the driver code. will be called by the lib
 	typedef
 	VOID
 	(__cdecl *pfnStartDebuggerTracer)(
@@ -85,6 +85,8 @@ namespace DriverEntryLib
 	Main(
 		IN PDRIVER_OBJECT DriverObject,
 		IN PUNICODE_STRING RegistryPath,
+		IN PCHAR DriverFileName,
+		IN PCHAR DriverFileVersion,
 		// a pointer to the driver implemented IDriverObject::GetInstance function
 		IN decltype(IDriverObject::GetInstance)* DriverObjectInstance,
 		pfnStartDebuggerTracer StartDebuggerTracer,

@@ -36,7 +36,7 @@
     <ClInclude Include="SecLabDlpDriverObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SecLabDlpDrv.h">
+    <ClInclude Include="SecLabDlp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClCompile Include="SecLabDlpDriverObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SecLabDlpDrv.cpp">
+    <ClCompile Include="SecLabDlp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
