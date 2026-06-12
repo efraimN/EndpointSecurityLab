@@ -1,5 +1,5 @@
 ;;;
-;;; SecLabDlp
+;;; SecLabDlpPnP
 ;;;
 
 [Version]
@@ -9,8 +9,8 @@ ClassGuid   = {17927B9D-6D0B-4B81-A237-E2CF578D73AC}
 Provider    = %CompanyName%
 PnpLockdown=1
 
-CatalogFile=SecLabDlp.cat
-CatalogFile.NTAMD64 = SecLabDlp.cat
+CatalogFile=SecLabDlpPnP.cat
+CatalogFile.NTX86 =SecLabDlpPnP.cat
  
 [DestinationDirs]
 DefaultDestDir         = 12
@@ -19,7 +19,7 @@ DefaultDestDir         = 12
 ;; Default install sections
 ;;
 
-[DefaultInstall.NTAMD64]
+[DefaultInstall.NTX86]
 OptionDesc = %DriverName%
 CopyFiles = DriverCopyFiles
 
@@ -27,12 +27,12 @@ CopyFiles = DriverCopyFiles
 1 = %DiskName%
 
 [DriverCopyFiles]
-SecLabDlp.sys
+SecLabDlpPnP.sys
 
 [SourceDisksFiles]
-SecLabDlp.sys = 1
+SecLabDlpPnP.sys = 1
 
 [Strings]
-DiskName                    = "SecLabDlp Installation Disk"
+DiskName                    = "SecLabDlpPnP Installation Disk"
 CompanyName                 = "Ephraim Neuberger"
-DriverName                  = "SecLabDlp"
+DriverName                  = "SecLabDlpPnP"

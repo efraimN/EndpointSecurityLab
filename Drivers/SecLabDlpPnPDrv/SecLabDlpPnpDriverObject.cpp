@@ -16,7 +16,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <WppIncludes.h>
 
 #include <DriverEntryLib.h>
-#include "SecLabDlpDriverObject.h"
+#include "SecLabDlpPnPDriverObject.h"
 
 #include "DevFilter\DevFilter.h"
 
