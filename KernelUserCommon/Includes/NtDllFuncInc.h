@@ -148,3 +148,92 @@ NTZW(SetInformationFile)(
 
 
 #endif // NOT _NTDDK_
+
+// START LPC
+
+NTSTATUS
+NTAPI
+NTZW(ReplyWaitReceivePortEx)(
+	IN HANDLE PortHandle,
+	OUT PVOID* PortContext OPTIONAL,
+	IN PPORT_MESSAGE ReplyMessage OPTIONAL,
+	OUT PPORT_MESSAGE ReceiveMessage,
+	IN PLARGE_INTEGER Timeout OPTIONAL
+	);
+
+NTSTATUS
+NTAPI
+NTZW(ReplyPort)(
+	IN HANDLE PortHandle,
+	IN PPORT_MESSAGE LpcReply
+	);
+
+NTSTATUS
+NTAPI
+NTZW(ReplyWaitReplyPort)(
+	IN HANDLE PortHandle,
+	IN OUT PPORT_MESSAGE LpcReply
+	);
+
+NTSTATUS
+NTAPI
+NTZW(CreateWaitablePort)(
+	PHANDLE PortHandle,
+	POBJECT_ATTRIBUTES ObjectAttributes,
+	ULONG MaxConnectInfoLength,
+	ULONG MaxDataLength,
+	ULONG NPMessageQueueSize OPTIONAL
+	);
+
+NTSTATUS
+NTAPI
+NTZW(CompleteConnectPort)(
+	HANDLE PortHandle
+	);
+
+NTSTATUS
+NTAPI
+NTZW(AcceptConnectPort)(
+	PHANDLE PortHandle,
+	PVOID PortContext OPTIONAL,
+	PPORT_MESSAGE ConnectionRequest,
+	BOOLEAN AcceptConnection,
+	PPORT_VIEW ServerView OPTIONAL,
+	PREMOTE_PORT_VIEW ClientView OPTIONAL
+	);
+
+NTSTATUS
+NTAPI
+NTZW(RequestWaitReplyPort)(
+	IN HANDLE PortHandle,
+	IN PPORT_MESSAGE LpcRequest,
+	OUT PPORT_MESSAGE LpcReply
+	);
+
+NTSTATUS
+NTAPI
+NTZW(RequestPort)(
+	IN HANDLE PortHandle,
+	IN PPORT_MESSAGE LpcRequest
+	);
+
+NTSTATUS
+NTAPI
+NTZW(ConnectPort)(
+	PHANDLE PortHandle,
+	PUNICODE_STRING PortName,
+	PSECURITY_QUALITY_OF_SERVICE SecurityQos,
+	PPORT_VIEW ClientView OPTIONAL,
+	PREMOTE_PORT_VIEW ServerView OPTIONAL,
+	PULONG MaxMessageLength OPTIONAL,
+	PVOID ConnectionInformation OPTIONAL,
+	PULONG ConnectionInformationLength OPTIONAL
+	);
+
+NTSTATUS
+NTAPI
+NTZW(ListenPort)(
+	IN HANDLE PortHandle,
+	OUT PPORT_MESSAGE Message
+	);
+// END LPC

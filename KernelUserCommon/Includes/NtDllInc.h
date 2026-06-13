@@ -236,7 +236,98 @@ typedef DWORD* PDWORD;
 
 #define INVALID_HANDLE_VALUE ((HANDLE)(LONG_PTR)-1)
 
+
+
 #endif
+
+
+//LPC
+	//
+	// LPC Message Types
+	//
+
+#define MAX_LPC_DATA 0x130    // Maximum number of bytes that can be copied through LPC
+
+typedef enum _LPC_TYPE
+{
+	LPC_NEW_MESSAGE,
+	LPC_REQUEST,
+	LPC_REPLY,
+	LPC_DATAGRAM,
+	LPC_LOST_REPLY,
+	LPC_PORT_CLOSED,
+	LPC_CLIENT_DIED,
+	LPC_EXCEPTION,
+	LPC_DEBUG_EVENT,
+	LPC_ERROR_EVENT,
+	LPC_CONNECTION_REQUEST,
+	LPC_CONNECTION_REFUSED,
+	LPC_MAXIMUM
+} LPC_TYPE;
+
+typedef struct _PORT_VIEW64
+{
+	ULONG Length;
+	ULONGLONG SectionHandle;
+	ULONG SectionOffset;
+	ULONGLONG ViewSize;
+	ULONGLONG ViewBase;
+	ULONGLONG ViewRemoteBase;
+} PORT_VIEW64, * PPORT_VIEW64;
+
+typedef struct _PORT_VIEW32
+{
+	ULONG Length;
+	HANDLE SectionHandle;
+	ULONG SectionOffset;
+	SIZE_T ViewSize;
+	PVOID ViewBase;
+	PVOID ViewRemoteBase;
+} PORT_VIEW32, * PPORT_VIEW32;
+
+typedef struct _PORT_VIEW* PPORT_VIEW;
+
+typedef struct _REMOTE_PORT_VIEW64
+{
+	ULONG Length;
+	ULONGLONG ViewSize;
+	ULONGLONG ViewBase;
+} REMOTE_PORT_VIEW64, * PREMOTE_PORT_VIEW64;
+
+typedef struct _REMOTE_PORT_VIEW32
+{
+	ULONG Length;
+	SIZE_T ViewSize;
+	PVOID ViewBase;
+} REMOTE_PORT_VIEW32, * PREMOTE_PORT_VIEW32;
+
+typedef struct _REMOTE_PORT_VIEW* PREMOTE_PORT_VIEW;
+
+typedef struct _PORT_MESSAGE64
+{
+	USHORT DataSize;
+	USHORT MessageSize;
+	USHORT MessageType;
+	SHORT VirtualRangesOffset;
+	CLIENT_ID_64 ClientId;
+	ULONG MessageId;
+	ULONGLONG SectionSize;
+} PORT_MESSAGE64, * PPORT_MESSAGE64;
+
+typedef struct _PORT_MESSAGE32
+{
+	USHORT DataSize;
+	USHORT MessageSize;
+	USHORT MessageType;
+	USHORT VirtualRangesOffset;
+	CLIENT_ID ClientId;
+	ULONG MessageId;
+	ULONG SectionSize;
+} PORT_MESSAGE32, * PPORT_MESSAGE32;
+
+typedef struct _PORT_MESSAGE* PPORT_MESSAGE;
+// End Lpc
+
 
 #ifdef NTZW
 #undef NTZW

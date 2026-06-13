@@ -16,7 +16,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <IRegUtils.h>
 
-class CRegUtils : public UserKernelUtilsLib::IRegUtilsInt
+class CRegUtils : public UserKernelUtilsLib::IRegUtils
 {
 public:
 	static CRegUtils *GetInstance();

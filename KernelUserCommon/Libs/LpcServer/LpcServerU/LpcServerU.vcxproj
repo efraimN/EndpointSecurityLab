@@ -19,20 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{04418EE6-49A0-4255-B73B-99813A42C1E8}</ProjectGuid>
-    <ProjectName>UserKernelUtilsK</ProjectName>
+    <ProjectGuid>{D89FA31F-C2C1-47EB-B713-BA8C71460967}</ProjectGuid>
+    <ProjectName>LpcServerU</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
-    <PlatformToolset>WindowsKernelModeDriver8.0</PlatformToolset>
-    <DriverType>WDM</DriverType>
-    <TargetVersion>Windows7</TargetVersion>
-    <DriverTargetPlatform>Desktop</DriverTargetPlatform>
-    <KernelBufferOverflowLib>$(DDK_LIB_PATH)\BufferOverflowK.lib</KernelBufferOverflowLib>
-    <SupportsPackaging>false</SupportsPackaging>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <ALLOW_DATE_TIME>1</ALLOW_DATE_TIME>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -65,15 +60,14 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</RuntimeTypeInfo>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</RuntimeTypeInfo>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</RuntimeTypeInfo>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</RuntimeTypeInfo>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\UserKernelUtilsK\RegUtils.cpp" />
-    <ClCompile Include="CriticalSection.cpp" />
-    <ClCompile Include="FileUtils.cpp" />
-    <ClCompile Include="LinkListLib.cpp" />
-    <ClCompile Include="MapFile.cpp" />
-    <ClCompile Include="MultiStringUtils.cpp" />
+    <ClCompile Include="LpcServLib.cpp" />
     <ClCompile Include="Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -82,12 +76,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\UserKernelUtilsK\RegUtils.h" />
-    <ClInclude Include="CriticalSection.h" />
-    <ClInclude Include="FileUtils.h" />
-    <ClInclude Include="LinkListLib.h" />
-    <ClInclude Include="MapFile.h" />
-    <ClInclude Include="MultiStringUtils.h" />
+    <ClInclude Include="LpcServLib.h" />
     <ClInclude Include="Precompiled.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
