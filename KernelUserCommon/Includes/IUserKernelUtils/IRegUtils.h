@@ -14,10 +14,10 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 namespace UserKernelUtilsLib
 {
-	class IRegUtilsInt
+	class IRegUtils
 	{
 	public:
-		static IRegUtilsInt* GetInstance();
+		static IRegUtils* GetInstance();
 
 		virtual NTSTATUS RegDeleteAllKeys(HANDLE ParentKey, DWORD DesiredAccess = 0) = 0;
 
@@ -106,13 +106,27 @@ namespace UserKernelUtilsLib
 			_In_ PWSTR DelString
 		) = 0;
 
+		typedef
+		BOOL
+		(*PREG_ENUM_KEYS_CALLBACK)(
+			_In_ HANDLE KeyHandle,
+			_In_opt_ PVOID Context
+			);
+
+		virtual
+		NTSTATUS
+		RegEnumKeys(
+			_In_ HANDLE RootKey,
+			_In_ PREG_ENUM_KEYS_CALLBACK Callback,
+			_In_opt_ PVOID Context
+		) = 0;
 
 	protected:
-		IRegUtilsInt()NOEXCEPT {};
-		virtual ~IRegUtilsInt() {};
+		IRegUtils()NOEXCEPT {};
+		virtual ~IRegUtils() {};
 
 	private:
-		IRegUtilsInt(const IRegUtilsInt& other);
-		IRegUtilsInt& operator=(const IRegUtilsInt& other);
+		IRegUtils(const IRegUtils& other);
+		IRegUtils& operator=(const IRegUtils& other);
 	};
 }

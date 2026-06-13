@@ -68,8 +68,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KernelUtilsLib", "Drivers\K
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IUserKernelUtils", "IUserKernelUtils", "{094D20E7-AA41-4C2E-B4D4-30E66514ECAF}"
 	ProjectSection(SolutionItems) = preProject
+		KernelUserCommon\Includes\IUserKernelUtils\CriticalSectionInt.h = KernelUserCommon\Includes\IUserKernelUtils\CriticalSectionInt.h
 		KernelUserCommon\Includes\IUserKernelUtils\IFileUtils.h = KernelUserCommon\Includes\IUserKernelUtils\IFileUtils.h
+		KernelUserCommon\Includes\IUserKernelUtils\ILinkListLibInt.h = KernelUserCommon\Includes\IUserKernelUtils\ILinkListLibInt.h
 		KernelUserCommon\Includes\IUserKernelUtils\IMapFile.h = KernelUserCommon\Includes\IUserKernelUtils\IMapFile.h
+		KernelUserCommon\Includes\IUserKernelUtils\IMultiStringUtils.h = KernelUserCommon\Includes\IUserKernelUtils\IMultiStringUtils.h
 		KernelUserCommon\Includes\IUserKernelUtils\IRegUtils.h = KernelUserCommon\Includes\IUserKernelUtils\IRegUtils.h
 	EndProjectSection
 EndProject
@@ -121,8 +124,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoverageTest", "TestUtils\C
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drivers", "Drivers", "{DC67A5E0-AD53-47E7-AA00-BB49AF1B38F4}"
+	ProjectSection(SolutionItems) = preProject
+		Drivers\Docs\DlpUsbDeviceControl.md = Drivers\Docs\DlpUsbDeviceControl.md
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SecLabDlpPnP", "Drivers\SecLabDlpPnPDrv\SecLabDlpPnp.vcxproj", "{5E907F87-9A9E-4F88-ABFA-591A44662015}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SecLabDlpClassic", "SecLabDlpClassic", "{8267B8DC-5219-46FC-87CD-E0F2BD68C4EF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SecLabDlpClassic", "Drivers\SecLabDlpClassicDrv\SecLabDlpClassic.vcxproj", "{31FB78E5-4E22-4917-9E00-60F92211160D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -224,6 +234,18 @@ Global
 		{5E907F87-9A9E-4F88-ABFA-591A44662015}.Release|x86.ActiveCfg = Release|Win32
 		{5E907F87-9A9E-4F88-ABFA-591A44662015}.Release|x86.Build.0 = Release|Win32
 		{5E907F87-9A9E-4F88-ABFA-591A44662015}.Release|x86.Deploy.0 = Release|Win32
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Debug|x64.ActiveCfg = Debug|x64
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Debug|x64.Build.0 = Debug|x64
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Debug|x64.Deploy.0 = Debug|x64
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Debug|x86.ActiveCfg = Debug|Win32
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Debug|x86.Build.0 = Debug|Win32
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Debug|x86.Deploy.0 = Debug|Win32
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Release|x64.ActiveCfg = Release|x64
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Release|x64.Build.0 = Release|x64
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Release|x64.Deploy.0 = Release|x64
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Release|x86.ActiveCfg = Release|Win32
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Release|x86.Build.0 = Release|Win32
+		{31FB78E5-4E22-4917-9E00-60F92211160D}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -258,6 +280,8 @@ Global
 		{50C922D2-18A3-45AA-9063-D3318CFEB4BD} = {FD41A134-D3A8-4955-9AD7-A6236EAD01C8}
 		{DC67A5E0-AD53-47E7-AA00-BB49AF1B38F4} = {CF1AA0C9-58B6-4ED2-BA85-8B7036CEDA2E}
 		{5E907F87-9A9E-4F88-ABFA-591A44662015} = {8F4C7F7B-482F-4A7D-83D1-C50F87F20BEA}
+		{8267B8DC-5219-46FC-87CD-E0F2BD68C4EF} = {DC67A5E0-AD53-47E7-AA00-BB49AF1B38F4}
+		{31FB78E5-4E22-4917-9E00-60F92211160D} = {8267B8DC-5219-46FC-87CD-E0F2BD68C4EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20CA15D3-B74C-496C-A17F-ADC08B83DA55}

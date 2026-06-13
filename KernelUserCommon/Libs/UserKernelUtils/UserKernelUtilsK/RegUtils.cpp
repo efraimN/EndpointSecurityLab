@@ -35,7 +35,7 @@ CRegUtils *CRegUtils::GetInstance()
 	return &s_CRegUtils;
 }
 
-IRegUtilsInt *IRegUtilsInt::GetInstance()
+IRegUtils *IRegUtils::GetInstance()
 {
 	return CRegUtils::GetInstance();
 }
@@ -754,4 +754,130 @@ CRegUtils::RemoveMultiStringFromKeyDeleteIfEmpty(
 			DelString,
 			TRUE
 		);
+}
+
+NTSTATUS
+CRegUtils::RegEnumKeys(
+	_In_ HANDLE RootKey,
+	_In_ PREG_ENUM_KEYS_CALLBACK Callback,
+	_In_opt_ PVOID Context
+)
+{
+	NTSTATUS status;
+	PKEY_BASIC_INFORMATION keyInfo;
+	ULONG resultLength;
+	ULONG index;
+	WCHAR savedChar;
+	UNICODE_STRING subKeyName;
+	OBJECT_ATTRIBUTES objectAttributes;
+	HANDLE subKey;
+	ULONG Attributes;
+
+	status = STATUS_UNSUCCESSFUL;
+	keyInfo = NULL;
+	subKey = NULL;
+
+	if (!Callback(RootKey, Context))
+	{
+		status = STATUS_SUCCESS;
+		goto Leave;
+	}
+
+	keyInfo = (PKEY_BASIC_INFORMATION)
+#ifndef _NTDDK_
+	new(std::nothrow) 
+#else
+	new('kWgR') 
+#endif
+	BYTE[1024];
+
+	if (!keyInfo)
+	{
+		status = STATUS_INSUFFICIENT_RESOURCES;
+		goto Leave;
+	}
+
+	for (index = 0; ; index++)
+	{
+		status = ZwEnumerateKey(
+			RootKey,
+			index,
+			KeyBasicInformation,
+			keyInfo,
+			1024,
+			&resultLength
+		);
+
+		if (status == STATUS_NO_MORE_ENTRIES)
+		{
+			status = STATUS_SUCCESS;
+			goto Leave;
+		}
+
+		if (!NT_SUCCESS(status))
+		{
+			goto Leave;
+		}
+
+		savedChar = keyInfo->Name[keyInfo->NameLength / sizeof(WCHAR)];
+		keyInfo->Name[keyInfo->NameLength / sizeof(WCHAR)] = 0;
+
+		RtlInitUnicodeString(&subKeyName, keyInfo->Name);
+
+		Attributes = 0
+			| OBJ_CASE_INSENSITIVE
+#ifdef _NTDDK_
+			| OBJ_KERNEL_HANDLE
+#endif
+			;
+
+		InitializeObjectAttributes(
+			&objectAttributes,
+			&subKeyName,
+			Attributes,
+			RootKey,
+			NULL
+		);
+
+		status = ZwOpenKey(
+			&subKey,
+			KEY_READ,
+			&objectAttributes
+		);
+
+		keyInfo->Name[keyInfo->NameLength / sizeof(WCHAR)] = savedChar;
+
+		if (!NT_SUCCESS(status))
+		{
+			status = STATUS_SUCCESS;
+			continue;
+		}
+
+		status = RegEnumKeys(
+			subKey,
+			Callback,
+			Context
+		);
+
+		ZwClose(subKey);
+		subKey = NULL;
+
+		if (!NT_SUCCESS(status))
+		{
+			goto Leave;
+		}
+	}
+
+Leave:
+	if (subKey)
+	{
+		ZwClose(subKey);
+	}
+
+	if (keyInfo)
+	{
+		delete[](PBYTE)keyInfo;
+	}
+
+	return status;
 }

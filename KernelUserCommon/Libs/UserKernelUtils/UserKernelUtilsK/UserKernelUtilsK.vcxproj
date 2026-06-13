@@ -69,7 +69,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\UserKernelUtilsK\RegUtils.cpp" />
+    <ClCompile Include="CriticalSection.cpp" />
     <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="LinkListLib.cpp" />
     <ClCompile Include="MapFile.cpp" />
     <ClCompile Include="MultiStringUtils.cpp" />
     <ClCompile Include="Precompiled.cpp">
@@ -81,7 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\UserKernelUtilsK\RegUtils.h" />
+    <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="LinkListLib.h" />
     <ClInclude Include="MapFile.h" />
     <ClInclude Include="MultiStringUtils.h" />
     <ClInclude Include="Precompiled.h" />

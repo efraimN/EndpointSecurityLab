@@ -17,8 +17,8 @@ for debug purposes
 int TEST_FUNCTION TestAddMultiStringToKey()
 {
 	NTSTATUS status;
-	IRegUtilsInt* pRegUtilsInt;
-	pRegUtilsInt = IRegUtilsInt::GetInstance();
+	IRegUtils* pRegUtilsInt;
+	pRegUtilsInt = IRegUtils::GetInstance();
 
 	status = pRegUtilsInt->AddMultiStringToKey(
 		RTL_REGISTRY_ABSOLUTE,

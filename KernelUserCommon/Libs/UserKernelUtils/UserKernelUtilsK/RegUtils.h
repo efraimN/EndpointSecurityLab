@@ -16,7 +16,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <IRegUtils.h>
 
-class CRegUtils : public UserKernelUtilsLib::IRegUtilsInt
+class CRegUtils : public UserKernelUtilsLib::IRegUtils
 {
 public:
 	static CRegUtils *GetInstance();
@@ -99,6 +99,14 @@ public:
 		_In_ PWSTR KeyNamePath,
 		_In_ PWSTR ValueName,
 		_In_ PWSTR DelString
+	);
+
+	virtual
+	NTSTATUS
+	RegEnumKeys(
+		_In_ HANDLE RootKey,
+		_In_ PREG_ENUM_KEYS_CALLBACK Callback,
+		_In_opt_ PVOID Context
 	);
 
 private:

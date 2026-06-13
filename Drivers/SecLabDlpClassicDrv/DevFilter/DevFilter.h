@@ -12,13 +12,25 @@ IN NO EVENT SHALL EPHRAIM NEUBERGER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LI
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifdef FILE__NAME
-#undef FILE__NAME
-#endif
-#pragma warning(push)
-#pragma warning(disable : 4651 )
-#include "Precompiled.h"
-#pragma warning(pop)
+#pragma once
 
-// TODO: reference any additional headers you need in Precompiled.H
-// and not in this file
+#include "DevFilterDrvHooks.h"
+
+class DevFilter
+{
+public:
+	static DevFilter* GetInstance();
+	BOOL Start();
+	void Stop();
+
+
+protected:
+
+private:
+
+	DevFilter();
+	virtual ~DevFilter();
+	DevFilter(const DevFilter& other);
+	DevFilter& operator=(const DevFilter& other);
+
+};
