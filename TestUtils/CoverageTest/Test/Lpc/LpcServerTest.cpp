@@ -17,7 +17,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <ILpcLibServ.h>
 
-#include "LpcTestCommon.h"
+#include <SecLabServerCommon.h>
 
 
 class CLpcTestServerCallbacks : public ILpcServReceiverHandler
@@ -32,7 +32,7 @@ public:
 
 	virtual VOID HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage)
 	{
-		PLPC_TEST_MESSAGE64 Message = (PLPC_TEST_MESSAGE64)PortMessage;
+		PLPC_SEC_LAB_SERVER_MESSAGE64 Message = (PLPC_SEC_LAB_SERVER_MESSAGE64)PortMessage;
 		printf("LPC server received message: %S\n", Message->Text);
 		wsprintfW(Message->Text, L"Response from LPC server your process id is %d",
 			(UINT)Message->BasicMessage.MessageHeader.ClientId.UniqueProcess
@@ -65,8 +65,8 @@ int TEST_FUNCTION LpcServerTest()
 
 	if (!pILpcServLib->Start(
 		&MyCLpcTestServerCallbacks,
-		sizeof(LPC_TEST_MESSAGE64),
-		LPC_TEST_PORT_NAME))
+		sizeof(LPC_SEC_LAB_SERVER_MESSAGE64),
+		SEC_LAB_SERVER_PORT_NAME))
 	{
 		printf("LpcServerTest Start failed\n");
 		goto Leave;;
