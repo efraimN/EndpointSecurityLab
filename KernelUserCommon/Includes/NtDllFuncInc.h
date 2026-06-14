@@ -147,6 +147,29 @@ NTZW(SetInformationFile)(
 	);
 
 
+NTSTATUS
+NTAPI
+NTZW(CreateEvent)(
+	_Out_ PHANDLE EventHandle,
+	_In_ ACCESS_MASK DesiredAccess,
+	_In_opt_ POBJECT_ATTRIBUTES ObjectAttributes,
+	_In_ EVENT_TYPE EventType,
+	_In_ BOOLEAN InitialState
+	);
+
+NTSTATUS
+NTAPI
+NTZW(SetEvent)(
+	_In_ HANDLE EventHandle,
+	_Out_opt_ PLONG PreviousState
+	);
+
+NTSTATUS
+NTAPI
+NTZW(ClearEvent)(
+	_In_ HANDLE EventHandle
+	);
+
 #endif // NOT _NTDDK_
 
 // START LPC

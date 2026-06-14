@@ -17,7 +17,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <ILpcLibClient.h>
 
-#include "LpcTestCommon.h"
+#include <SecLabServerCommon.h>
 
 /*!
 Usage:
@@ -31,7 +31,7 @@ for debug purposes
 int TEST_FUNCTION LpcClientTest()
 {
 	NTSTATUS status;
-	LPC_TEST_MESSAGE64 Message;
+	LPC_SEC_LAB_SERVER_MESSAGE64 Message;
 	CLpcClientLibInt* Client;
 
 	RtlZeroMemory(&Message, sizeof(Message));
@@ -43,7 +43,7 @@ int TEST_FUNCTION LpcClientTest()
 		return -1;
 	}
 
-	if (!Client->Start(LPC_TEST_PORT_NAME, sizeof(LPC_TEST_MESSAGE64)))
+	if (!Client->Start(SEC_LAB_SERVER_PORT_NAME, sizeof(LPC_SEC_LAB_SERVER_MESSAGE64)))
 	{
 		printf("LpcClientTest Start failed\n");
 		CLpcClientLibInt::FreeInstance(Client);

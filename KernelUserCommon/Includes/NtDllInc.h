@@ -157,6 +157,10 @@ typedef struct _FILE_END_OF_FILE_INFORMATION {
 	LARGE_INTEGER EndOfFile;
 } FILE_END_OF_FILE_INFORMATION, * PFILE_END_OF_FILE_INFORMATION;
 
+typedef enum _EVENT_TYPE {
+	NotificationEvent,
+	SynchronizationEvent
+} EVENT_TYPE;
 
 #endif // NOT _NTDK_
 
