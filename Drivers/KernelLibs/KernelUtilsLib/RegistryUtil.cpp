@@ -80,7 +80,7 @@ IRegistryUtil::InitDriverRegPath(IN PUNICODE_STRING RegistryPath)
 
 	m_DriverImageFileName.MaximumLength = 0;
 
-	RetVal = UserKernelUtilsLib::IRegUtilsInt::GetInstance()->RegGetValue(
+	RetVal = UserKernelUtilsLib::IRegUtils::GetInstance()->RegGetValue(
 		RTL_REGISTRY_ABSOLUTE,
 		m_RegistryPath.Buffer,
 		L"ImagePath",
@@ -110,7 +110,7 @@ IRegistryUtil::InitDriverRegPath(IN PUNICODE_STRING RegistryPath)
 		goto Leave;
 	}
 
-	RetVal = UserKernelUtilsLib::IRegUtilsInt::GetInstance()->RegGetValue(
+	RetVal = UserKernelUtilsLib::IRegUtils::GetInstance()->RegGetValue(
 		RTL_REGISTRY_ABSOLUTE,
 		m_RegistryPath.Buffer,
 		L"ImagePath",

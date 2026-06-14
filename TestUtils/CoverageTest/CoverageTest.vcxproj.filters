@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="TestWrappers">
-      <UniqueIdentifier>{13ec71db-1094-4c4f-ad77-838be3a47c24}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Test">
       <UniqueIdentifier>{29604931-638f-40ab-b942-b3e2e1da53cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Lpc">
+      <UniqueIdentifier>{2dedfdca-3fd5-47b6-bfb4-8766f19e3a11}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -26,6 +26,9 @@
     </ClInclude>
     <ClInclude Include="Precompiled.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Lpc\LpcTestCommon.h">
+      <Filter>Test\Lpc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="Test\RegUtilsTest.cpp">
       <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Lpc\LpcClientTest.cpp">
+      <Filter>Test\Lpc</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Lpc\LpcServerTest.cpp">
+      <Filter>Test\Lpc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

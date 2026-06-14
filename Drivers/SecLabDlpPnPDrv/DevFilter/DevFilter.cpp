@@ -149,6 +149,7 @@ Leave:
 	return RetVal;
 }
 
+extern "C" PULONG InitSafeBootMode;
 
 NTSTATUS
 DevFilter::AddDevice(
@@ -164,7 +165,13 @@ DevFilter::AddDevice(
 	PWCHAR ClassName = NULL;
 	ULONG ClassNameSize = 0;
 
-	ESL_DBG_OUT(DBG_TRACE_FUNCTIONS, "Inside function %!FUNC!" );
+	ESL_DBG_OUT(DBG_TRACE_FUNCTIONS, "Inside function %!FUNC!");
+
+	if (*InitSafeBootMode > 0)
+	{
+		goto Leave;
+	}
+
 
 	HardwareID = GetDeviceInformation(PDO, DevicePropertyHardwareID, &HardwareIDSize);
 	if (!HardwareID)
@@ -202,6 +209,8 @@ Leave:
 	{
 		delete[]HardwareID;
 	}
+
+	ESL_DBG_OUT(DBG_TRACE_FUNCTIONS, "Finished function %!FUNC!");
 	return STATUS_SUCCESS;
 }
 

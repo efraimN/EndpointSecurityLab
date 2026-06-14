@@ -51,7 +51,7 @@ BOOL PrintMtString(PWCHAR MtString)
 
 /*!
 Usage:
-Tester TestMultiStringUtilsLib
+CoverageTest TestMultiStringUtilsLib
 
 Do not use
 

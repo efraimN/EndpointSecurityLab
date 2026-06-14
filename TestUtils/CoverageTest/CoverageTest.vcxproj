@@ -60,7 +60,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -83,7 +83,7 @@ echo %COMMAND%
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -106,7 +106,7 @@ echo %COMMAND%
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -129,7 +129,7 @@ echo %COMMAND%
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -155,12 +155,15 @@ echo %COMMAND%
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <UndefinePreprocessorDefinitions>FILE__NAME</UndefinePreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Test\Lpc\LpcClientTest.cpp" />
+    <ClCompile Include="Test\Lpc\LpcServerTest.cpp" />
     <ClCompile Include="Test\MultiStringUtilsTest.cpp" />
     <ClCompile Include="Test\RegUtilsTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Resources\Resource.h" />
+    <ClInclude Include="Test\Lpc\LpcTestCommon.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc1">

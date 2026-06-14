@@ -12,13 +12,36 @@ IN NO EVENT SHALL EPHRAIM NEUBERGER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LI
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifdef FILE__NAME
-#undef FILE__NAME
-#endif
-#pragma warning(push)
-#pragma warning(disable : 4651 )
-#include "Precompiled.h"
-#pragma warning(pop)
+#pragma once
 
-// TODO: reference any additional headers you need in Precompiled.H
-// and not in this file
+#include <ILpcLibClient.h>
+
+
+class CLpcClientLibU : public CLpcClientLibInt
+{
+public:
+
+	friend class CLpcClientLibInt;
+	virtual BOOL Start(
+		PCWCHAR PortName,
+		USHORT PortMessageSize
+	);
+
+    virtual VOID Stop();
+
+	virtual NTSTATUS SendMessageWaitResponse(
+		PLPC_BASIC_MESSAGE LpcMessage,
+		BOOLEAN WaitResponse
+	);
+
+protected:
+
+private:
+	CLpcClientLibU(BOOLEAN Use64bitstructs);
+	virtual ~CLpcClientLibU();
+    
+	HANDLE m_PortHandle;
+	USHORT m_PortMessageSize;
+	BOOLEAN m_Use64bitstructs;
+};
+

@@ -146,6 +146,66 @@ extern "C"
 		_In_opt_ PVOID EntryContext
 	);
 
+
+	VOID
+		NTAPI
+		RtlSetLastWin32Error(
+			DWORD err
+		);
+
+	VOID
+		NTAPI
+		RtlSetLastWin32ErrorAndNtStatusFromNtStatus(
+			IN NTSTATUS Status
+		);
+
+	NTSTATUS
+		NTAPI
+		RtlSetOwnerSecurityDescriptor(
+			_Inout_  PSECURITY_DESCRIPTOR SecurityDescriptor,
+			_In_opt_ PSID                 Owner,
+			_In_opt_ BOOLEAN              OwnerDefaulted
+		);
+
+	NTSTATUS
+		NTAPI
+		RtlCreateAcl(
+			_Out_ PACL  Acl,
+			_In_  ULONG AclLength,
+			_In_  ULONG AceRevision
+		);
+
+	NTSTATUS
+		NTAPI
+		RtlAddAccessAllowedAce(
+			_Inout_ PACL        Acl,
+			_In_    ULONG       AceRevision,
+			_In_    ACCESS_MASK AccessMask,
+			_In_    PSID        Sid
+		);
+
+	NTSTATUS
+		NTAPI
+		RtlCreateSecurityDescriptor(
+			_Out_ PSECURITY_DESCRIPTOR SecurityDescriptor,
+			_In_  ULONG                Revision
+		);
+
+	NTSTATUS
+		NTAPI
+		RtlSetDaclSecurityDescriptor(
+			_Inout_  PSECURITY_DESCRIPTOR SecurityDescriptor,
+			_In_     BOOLEAN              DaclPresent,
+			_In_opt_ PACL                 Dacl,
+			_In_opt_ BOOLEAN              DaclDefaulted
+		);
+
+	BOOLEAN
+		NTAPI
+		RtlValidSecurityDescriptor(
+			_In_ PSECURITY_DESCRIPTOR SecurityDescriptor
+		);
+
 #endif // NOT _NTDDK_
 
 

@@ -35,7 +35,7 @@ CRegUtils *CRegUtils::GetInstance()
 	return &s_CRegUtils;
 }
 
-IRegUtilsInt *IRegUtilsInt::GetInstance()
+IRegUtils *IRegUtils::GetInstance()
 {
 	return CRegUtils::GetInstance();
 }

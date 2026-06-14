@@ -18,22 +18,7 @@
     <ClCompile Include="Precompiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\UserKernelUtilsK\RegUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MapFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MultiStringUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LinkListLib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CriticalSection.cpp">
+    <ClCompile Include="LpcClientLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,22 +26,7 @@
     <ClInclude Include="Precompiled.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\UserKernelUtilsK\RegUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MapFile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MultiStringUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FileUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LinkListLib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CriticalSection.h">
+    <ClInclude Include="LpcClientLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
