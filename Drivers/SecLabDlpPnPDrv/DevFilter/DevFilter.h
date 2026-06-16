@@ -54,8 +54,8 @@ private:
 	BOOL
 	AttachToDevice(
 		IN PDEVICE_OBJECT PDO,
-		PWCHAR HardwareID,
-		BOOL LearnMode
+		PWCHAR HardwareID//,
+		/*BOOL LearnMode*/
 	);
 
 	virtual
@@ -81,7 +81,7 @@ private:
 
 	PWCHAR m_HardwareID;
 	BOOL m_Blocked;
-	BOOL m_LearnMode;
+// 	BOOL m_LearnMode;
 
 	//
 	// "THE PDO"  (ejected by the root bus or ACPI)

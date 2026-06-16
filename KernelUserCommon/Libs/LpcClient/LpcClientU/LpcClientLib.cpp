@@ -20,7 +20,16 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 CLpcClientLibInt* CLpcClientLibInt::GetNewInstance(BOOLEAN Use64bitstructs)
 {
-	return new CLpcClientLibU(Use64bitstructs);
+
+
+
+	return
+#ifdef _NTDDK_
+		new('lpCL')
+#else
+		new(std::nothrow)
+#endif
+		CLpcClientLibU(Use64bitstructs);
 }
 
 void CLpcClientLibInt::FreeInstance(CLpcClientLibInt* Instance)
@@ -41,8 +50,7 @@ CLpcClientLibU::~CLpcClientLibU()
 }
 
 BOOL CLpcClientLibU::Start(
-	PCWCHAR PortName,
-	USHORT PortMessageSize
+	PCWCHAR PortName
 )
 {
 	BOOL RetVal = FALSE;
@@ -88,13 +96,8 @@ BOOL CLpcClientLibU::Start(
         ESL_DBG_OUT(DBG_ERROR, "Returned bad data closing");
 		goto Leave;
 	}
-	if (PortMessageSize > MaxPortMessageSize)
-	{
-        ESL_DBG_OUT(DBG_ERROR, "PortMessageSize > MaxPortMessageSize closing");
-		goto Leave;
-	}
 
-	m_PortMessageSize = PortMessageSize;
+	m_PortMessageSize =(USHORT) MaxPortMessageSize;
     RetVal = TRUE;
 
 Leave:

@@ -14,34 +14,27 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #pragma once
 
-#include <LpcLibCommonInc.h>
+#include <ILpcLibServ.h>
+#include <SecLabServerCommon.h>
 
-class CLpcClientLibInt
+class MyServerCallbacks : public ILpcServReceiverHandler
 {
 public:
-    // delete copy and move constructors and assign operators
-    CLpcClientLibInt(CLpcClientLibInt const&);             // Copy construct
-    CLpcClientLibInt(CLpcClientLibInt&&);                  // Move construct
-    CLpcClientLibInt& operator=(CLpcClientLibInt const&);  // Copy assign
-    CLpcClientLibInt& operator=(CLpcClientLibInt&&);       // Move assign
+	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage);
+	virtual VOID HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage);
+};
 
-    static CLpcClientLibInt* GetNewInstance(BOOLEAN Use64bitstructs);
-	static void FreeInstance(CLpcClientLibInt* Instance);
 
-	virtual BOOL Start(
-		PCWCHAR PortName
-	) = 0;
+class MyLpcServer
+{
+public:
+	BOOL Start();
+	BOOL Stop();
 
-	virtual VOID Stop() = 0;
+	MyLpcServer();
+	~MyLpcServer();
 
-	virtual NTSTATUS SendMessageWaitResponse(
-		PLPC_BASIC_MESSAGE LpcMessage,
-		BOOLEAN WaitResponse
-	) = 0;
-
-protected:
-	CLpcClientLibInt() {};
-	~CLpcClientLibInt() {};
 private:
+
 };
 

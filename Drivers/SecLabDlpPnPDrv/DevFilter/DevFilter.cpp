@@ -16,6 +16,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <WppIncludes.h>
 
 #include "DevFilter.h"
+#include "Messages.h"
 
 void* __cdecl DevFilter::operator new(size_t nSize, PDRIVER_OBJECT DriverObject, DEVICE_TYPE Type)
 {
@@ -105,13 +106,30 @@ DevFilter::~DevFilter()
 
 // For now this will block any device
 static
-BOOL IsDeviceOnList(PWCHAR /*HardwareID*/, ULONG /*HardwareIDSize*/, BOOL* LearnMode)
+BOOL IsDeviceOnList(PWCHAR HardwareID, ULONG HardwareIDSize/*, BOOL* LearnMode*/)
 {
-	*LearnMode = FALSE;
-	return TRUE;
+// 	*LearnMode = FALSE;
+	MessagesToUser Message = { 0 };
+	BOOL RetVal = FALSE;
+
+	RtlCopyMemory(Message.Messages.GetLPCBlocStatus.HardwareId, HardwareID, HardwareIDSize);
+
+	if(SendMessages::GetInstance()->SendMessage(
+		GetLpcInBlacList,
+		&Message,
+		TRUE // has response
+	))
+	{
+		if (Message.Messages.GetLPCBlocStatus.ShouldBlock)
+		{
+			RetVal = TRUE;
+		}
+	}
+
+	return RetVal;
 }
 
-BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID, BOOL LearnMode)
+BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID/*, BOOL LearnMode*/)
 {
 	BOOL RetVal = FALSE;
 	PDEVICE_OBJECT	TopDeviceObject = NULL;
@@ -129,7 +147,7 @@ BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID, BOOL Le
 		goto Leave;
 	}
 
-	pDevFilter->m_LearnMode = LearnMode;
+// 	pDevFilter->m_LearnMode = LearnMode;
 
 	pDevFilter->m_TopOfStackBeforeUs = IoAttachDeviceToDeviceStack(pDevFilter->m_pDeviceObject, pDevFilter->m_PDO);
 	if (!pDevFilter->m_TopOfStackBeforeUs)
@@ -160,7 +178,7 @@ DevFilter::AddDevice(
 	PWCHAR HardwareID = NULL;
 	ULONG HardwareIDSize = 0;
 
-	BOOL LearnMode = TRUE;
+// 	BOOL LearnMode = TRUE;
 
 	PWCHAR ClassName = NULL;
 	ULONG ClassNameSize = 0;
@@ -185,16 +203,16 @@ DevFilter::AddDevice(
 		ESL_DBG_OUT(DBG_INFO, "GetDeviceInformation ClassName %S", ClassName);
 	}
 
-	if (!IsDeviceOnList(HardwareID, HardwareIDSize / 2, &LearnMode))
+	if (!IsDeviceOnList(HardwareID, HardwareIDSize / 2/*, &LearnMode*/))
 	{
 		goto Leave;
 	}
 
-	ESL_DBG_OUT(DBG_INFO, "Device %S is on list and will %s blocked", HardwareID, LearnMode ? "be NOT" : "be");
+	ESL_DBG_OUT(DBG_INFO, "Device %S is on list and will %s blocked", HardwareID, "be");
 
 // 	SendAttachDetachMessage(HardwareID, TRUE, LearnMode);
 
-	if (!AttachToDevice(PDO, HardwareID, LearnMode))
+	if (!AttachToDevice(PDO, HardwareID/*, LearnMode*/))
 	{
 		goto Leave;
 	}
@@ -304,7 +322,7 @@ DevFilter::PnPDispatch(
 
 			if (NT_SUCCESS(RetVal) && NT_SUCCESS(Irp->IoStatus.Status))
 			{
-				if (!m_LearnMode)
+// 				if (!m_LearnMode)
 				{
 					RetVal = STATUS_ACCESS_DENIED;
 				}

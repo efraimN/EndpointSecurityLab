@@ -43,7 +43,7 @@ int TEST_FUNCTION LpcClientTest()
 		return -1;
 	}
 
-	if (!Client->Start(SEC_LAB_SERVER_PORT_NAME, sizeof(LPC_SEC_LAB_SERVER_MESSAGE64)))
+	if (!Client->Start(SEC_LAB_SERVER_PORT_NAME))
 	{
 		printf("LpcClientTest Start failed\n");
 		CLpcClientLibInt::FreeInstance(Client);

@@ -1,3 +1,17 @@
+/*
+Copyright (c) 2026 - present, Ephraim Neuberger. All rights reserved.
+
+The code and materials provided by Ephraim Neuberger are for non-commercial testing and evaluation purposes only.
+Ephraim Neuberger reserves all rights not expressly granted.
+
+Any permitted copy must retain this copyright notice and disclaimer.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL EPHRAIM NEUBERGER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 #include "Precompiled.h"
 
 #include <WppIncludes.h>
@@ -11,19 +25,12 @@
 #include <fcntl.h>
 #include <io.h>
 
-#include "Server.h"
+#include "LpcServer.h"
 
 BOOL g_IsService = TRUE;
 SecLabService g_SecLabServiceInstance;
 
-void OpenConsole() {
-	if (AllocConsole()) {
-		FILE* f;
-		freopen_s(&f, "CONOUT$", "w", stdout);
-		freopen_s(&f, "CONOUT$", "w", stderr);
-		freopen_s(&f, "CONIN$", "r", stdin);
-	}
-}
+MyLpcServer pMyLpcServer;
 
 int _stdcall WinMain(
 	HINSTANCE /*hInstance*/,
@@ -57,11 +64,6 @@ int _stdcall WinMain(
 		LocalFree(Argv);
 	}
 
-	if (!g_IsService)
-	{
-		OpenConsole();
-	}
-
 	IServiceLib* pServiceLib = NULL;
 
 	pServiceLib = IServiceLib::GetInstance();
@@ -86,36 +88,30 @@ Leave:
 	{
 		pServiceLib->Stop();
 	}
+
 	WPP_CLEANUP();
+
 	return RetVal;
 }
 
-ILpcServLib* g_pILpcServLib = NULL;
-MyServerCallbacks MyServerCallbacksInstance;
 
 BOOL SecLabService::ServiceInitLogic(IServiceLib* ServiceLib)
 {
-	BOOL RetVal = FALSE;
+	BOOL RetVal;
+
 	ServiceLib->SetAllowStop(TRUE);
 
-	g_pILpcServLib = ILpcServLib::GetNewInstance(TRUE);
-	if (!g_pILpcServLib)
+	RetVal = pMyLpcServer.Start();
+
+	if (!RetVal)
 	{
-		goto Leave;;
+		ESL_DBG_OUT(DBG_INFO, "LpcServer Start failed LPC not running");
+	}
+	else
+	{
+		ESL_DBG_OUT(DBG_INFO, "LpcServer Started");
 	}
 
-	if (!g_pILpcServLib->Start(
-		&MyServerCallbacksInstance,
-		sizeof(LPC_SEC_LAB_SERVER_MESSAGE64),
-		SEC_LAB_SERVER_PORT_NAME
-	))
-	{
-		ESL_DBG_OUT(DBG_ERROR, "LpcServerTest Start failed\n");
-		goto Leave;;
-	}
-
-	RetVal = TRUE;
-Leave:
 	return RetVal;
 }
 
@@ -124,27 +120,30 @@ BOOL SecLabService::MainServiceLoop(PDWORD WaitInterval, IServiceLib* /*ServiceL
 
 	if (!g_IsService)
 	{
-		printf("LpcServer started\n");
+		printf("\nLpcServer started\n");
 		printf("Press any key to exit\n\n");
+
 		_getch();
+
 		return FALSE;
 	}
 
-	*WaitInterval = 5000;
+// 	ESL_DBG_OUT(DBG_INFO, "LpcServer MainLoop");
+	*WaitInterval = 500;
 
 
-// Leave:
 	return TRUE; // TRUE will be run again and again
 }
 
-DWORD SecLabService::ServiceExitLogic(IServiceLib* /*ServiceLib*/)
+int SecLabService::ServiceExitLogic(IServiceLib* /*ServiceLib*/)
 {
-	if (g_pILpcServLib)
+	if (!pMyLpcServer.Stop())
 	{
-		g_pILpcServLib->Stop();
-		ILpcServLib::FreeInstance(g_pILpcServLib);
-		g_pILpcServLib = NULL;
+		ESL_DBG_OUT(DBG_INFO, "ServiceExitLogic exiting with Error");
+
+		return -1;
 	}
+	ESL_DBG_OUT(DBG_INFO, "ServiceExitLogic Exiting");
 	return 0;
 }
 

@@ -19,6 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include "SecLabDlpPnPDriverObject.h"
 
 #include "DevFilter\DevFilter.h"
+#include "Messages.h"
 
 
 IDriverObject* IDriverObject::GetInstance()
@@ -39,10 +40,12 @@ NTSTATUS CMyDriverObject::DoStartStop(BOOL Start_Stop)
 
 		if (Start_Stop)
 		{
+			SendMessages::GetInstance()->Start();
 			DriverEntryLib::G_DriverObject->DriverExtension->AddDevice = DevFilter::AddDevice;
 		}
 		else
 		{
+			SendMessages::GetInstance()->Stop();
 		}
 
 		status = STATUS_SUCCESS;

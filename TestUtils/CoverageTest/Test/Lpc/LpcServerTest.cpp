@@ -26,17 +26,31 @@ public:
 	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage)
 	{
 		PLPC_BASIC_MESSAGE64 Message = (PLPC_BASIC_MESSAGE64)PortMessage;
-		printf("\nLPC test client connected %d\n", (UINT)Message->MessageHeader.ClientId.UniqueProcess);
+		UINT PID;
+
+		PID = (UINT)Message->MessageHeader.ClientId.UniqueProcess;
+
+		ESL_DBG_OUT(DBG_INFO, "LPC test client connected %d", PID);
+		printf("\nLPC test client connected %d\n", PID);
 		return TRUE;
 	}
 
 	virtual VOID HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage)
 	{
-		PLPC_SEC_LAB_SERVER_MESSAGE64 Message = (PLPC_SEC_LAB_SERVER_MESSAGE64)PortMessage;
-		printf("LPC server received message: %S\n", Message->Text);
-		wsprintfW(Message->Text, L"Response from LPC server your process id is %d",
-			(UINT)Message->BasicMessage.MessageHeader.ClientId.UniqueProcess
-		);
+		PMessagesToUser Message = (PMessagesToUser)PortMessage;
+		KernelMessagesToUser MesageType;
+		MesageType = Message->MesageType;
+
+		printf("LPC server received message: %d", MesageType);
+
+		{
+			PWCHAR MessageText;
+			MessageText = Message->Messages.LPCSecLabServerMessage.Text;
+
+			printf("LPC server received message: %S\n", MessageText);
+			wsprintfW(MessageText, L"Response from LPC server your process id is %d",
+				(UINT)Message->BasicMessage.MessageHeader.ClientId.UniqueProcess);
+		}
 
 	}
 };
@@ -65,7 +79,7 @@ int TEST_FUNCTION LpcServerTest()
 
 	if (!pILpcServLib->Start(
 		&MyCLpcTestServerCallbacks,
-		sizeof(LPC_SEC_LAB_SERVER_MESSAGE64),
+		SIZE_OF_LCP_MESSAGE,
 		SEC_LAB_SERVER_PORT_NAME))
 	{
 		printf("LpcServerTest Start failed\n");
