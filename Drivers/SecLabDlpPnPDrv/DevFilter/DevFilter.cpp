@@ -167,8 +167,6 @@ Leave:
 	return RetVal;
 }
 
-extern "C" PULONG InitSafeBootMode;
-
 NTSTATUS
 DevFilter::AddDevice(
 	IN PDRIVER_OBJECT,
@@ -184,12 +182,6 @@ DevFilter::AddDevice(
 	ULONG ClassNameSize = 0;
 
 	ESL_DBG_OUT(DBG_TRACE_FUNCTIONS, "Inside function %!FUNC!");
-
-	if (*InitSafeBootMode > 0)
-	{
-		goto Leave;
-	}
-
 
 	HardwareID = GetDeviceInformation(PDO, DevicePropertyHardwareID, &HardwareIDSize);
 	if (!HardwareID)

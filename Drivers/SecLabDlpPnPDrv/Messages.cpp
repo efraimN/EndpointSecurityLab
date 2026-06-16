@@ -30,8 +30,8 @@ SendMessages::~SendMessages()
 
 SendMessages* SendMessages::GetInstance()
 {
-	static SendMessages* Singletone;
-	return Singletone;
+	static SendMessages Singletone;
+	return &Singletone;
 }
 
 BOOL SendMessages::Start()
