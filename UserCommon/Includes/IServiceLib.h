@@ -15,8 +15,8 @@ public:
 	/*returning TRUE will be run again and again*/
 	virtual BOOL MainServiceLoop(PDWORD WaitInterval, IServiceLib* ServiceLib) = 0;
 
-	/* the return value will be returned by the service and the process*/
-	virtual DWORD ServiceExitLogic(IServiceLib* ServiceLib) = 0;
+	/* the return value will be returned by the process*/
+	virtual int ServiceExitLogic(IServiceLib* ServiceLib) = 0;
 
 	// if return TRUE the default handler wont be called
 	virtual BOOL ServiceControlHandler(
@@ -53,9 +53,8 @@ public:
 
 		if Service_Process = FALSE will return when MainServiceLoop returns FALSE
 	*/
-	virtual DWORD RunServiceLogic(BOOL Service_Process) = 0;
+	virtual int RunServiceLogic(BOOL Service_Process) = 0;
 
-	//
 	virtual void SetAllowStop(BOOL SshouldAllow) = 0;
 
 	virtual void ReportServiceStatus(DWORD CurrentState, DWORD ExitCode, DWORD WaitHint) = 0;

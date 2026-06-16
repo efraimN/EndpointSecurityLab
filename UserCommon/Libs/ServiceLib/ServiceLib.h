@@ -14,7 +14,7 @@ public:
 	virtual VOID Stop();
 
 	/* Will not return until the service is stopped */
-	virtual DWORD RunServiceLogic(BOOL Service_Process);
+	virtual int RunServiceLogic(BOOL Service_Process);
 
 	virtual void SetAllowStop(BOOL ShouldAllow);
 
@@ -56,7 +56,7 @@ private:
 
 	HANDLE m_ServiceStopEvent  = NULL;
 
-	DWORD m_ExitCode = 0;
+	int m_ExitCode = 0;
 	
 	BOOL m_Service_Process = TRUE;
 

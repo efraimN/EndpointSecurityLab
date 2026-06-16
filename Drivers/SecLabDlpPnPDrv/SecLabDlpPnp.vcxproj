@@ -83,16 +83,16 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ProcessCreationCallBack;ProcessCreationCallBack\ProcessList;ProcessCreationCallBack\EarlyInjection;ImageLoadingCallBack;ImageLoadingCallBack\DllInject;ImageLoadingCallBack\DllLoadProtect;ProfileMgr;FileMiniFilter;Registry;VirtualDisk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent />
@@ -101,6 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DevFilter\DevFilter.cpp" />
+    <ClCompile Include="Messages.cpp" />
     <ClCompile Include="Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -112,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DevFilter\DevFilter.h" />
+    <ClInclude Include="Messages.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="SecLabDlpPnp.h" />

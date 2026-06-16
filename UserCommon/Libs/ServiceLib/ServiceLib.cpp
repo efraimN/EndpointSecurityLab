@@ -3,6 +3,40 @@
 
 #include "ServiceLib.h"
 
+static
+BOOL m_HasConsle = FALSE;
+
+void OpenConsole()
+{
+
+	if (!AttachConsole(ATTACH_PARENT_PROCESS))
+	{
+		if (!AllocConsole())
+		{
+			return;
+		}
+	}
+
+	FILE* f;
+	freopen_s(&f, "CONOUT$", "w", stdout);
+	freopen_s(&f, "CONOUT$", "w", stderr);
+	freopen_s(&f, "CONIN$", "r", stdin);
+
+	m_HasConsle = TRUE;
+
+}
+
+void CloseConsole()
+{
+	if (m_HasConsle)
+	{
+		fflush(stdout);
+		fflush(stderr);
+
+		FreeConsole();
+	}
+}
+
 
 ServiceLibImp::ServiceLibImp()
 {
@@ -72,7 +106,7 @@ Leave:
 	return;
 }
 
-DWORD ServiceLibImp::RunServiceLogic(BOOL Service_Process)
+int ServiceLibImp::RunServiceLogic(BOOL Service_Process)
 {
 	m_Service_Process = Service_Process;
 	auto RunAsProcess = [&]()
@@ -96,14 +130,16 @@ DWORD ServiceLibImp::RunServiceLogic(BOOL Service_Process)
 		}
 
 	Leave:
-		m_ExitCode = m_ServiceLogic->ServiceExitLogic(this);
 
-		return m_ExitCode;
+		return m_ServiceLogic->ServiceExitLogic(this);
 	};
 
 	if (!m_Service_Process)
 	{
-		return RunAsProcess();
+		OpenConsole();
+		m_ExitCode = RunAsProcess();
+		CloseConsole();
+		goto Leave;
 	}
 
 	if (!m_Inited)
