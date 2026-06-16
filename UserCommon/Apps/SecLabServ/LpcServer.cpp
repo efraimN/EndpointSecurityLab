@@ -122,7 +122,7 @@ VOID MyServerCallbacks::HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage)
 				printf("LPC server received HardwareID: %S\n", HardwareID);
 			}
 
-			*ShouldBlock = FALSE;
+			*ShouldBlock = TRUE;
 		}
 		break;
 

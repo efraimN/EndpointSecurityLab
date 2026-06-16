@@ -66,6 +66,7 @@ VOID SendMessages::Stop()
 {
 	if (m_Inited)
 	{
+		m_Client->Stop();
 		CLpcClientLibInt::FreeInstance(m_Client);
 		m_Inited = FALSE;
 		m_Client = NULL;
