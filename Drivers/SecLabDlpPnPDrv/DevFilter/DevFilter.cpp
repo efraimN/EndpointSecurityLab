@@ -106,7 +106,7 @@ DevFilter::~DevFilter()
 
 // For now this will block any device
 static
-BOOL IsDeviceOnList(PWCHAR HardwareID, ULONG HardwareIDSize/*, BOOL* LearnMode*/)
+BOOL IsDeviceOnList(PWCHAR HardwareID, ULONG HardwareIDSize)
 {
 // 	*LearnMode = FALSE;
 	MessagesToUser Message = { 0 };
@@ -129,7 +129,7 @@ BOOL IsDeviceOnList(PWCHAR HardwareID, ULONG HardwareIDSize/*, BOOL* LearnMode*/
 	return RetVal;
 }
 
-BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID/*, BOOL LearnMode*/)
+BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID)
 {
 	BOOL RetVal = FALSE;
 	PDEVICE_OBJECT	TopDeviceObject = NULL;
@@ -146,8 +146,6 @@ BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID/*, BOOL 
 	{
 		goto Leave;
 	}
-
-// 	pDevFilter->m_LearnMode = LearnMode;
 
 	pDevFilter->m_TopOfStackBeforeUs = IoAttachDeviceToDeviceStack(pDevFilter->m_pDeviceObject, pDevFilter->m_PDO);
 	if (!pDevFilter->m_TopOfStackBeforeUs)
@@ -176,8 +174,6 @@ DevFilter::AddDevice(
 	PWCHAR HardwareID = NULL;
 	ULONG HardwareIDSize = 0;
 
-// 	BOOL LearnMode = TRUE;
-
 	PWCHAR ClassName = NULL;
 	ULONG ClassNameSize = 0;
 
@@ -189,22 +185,22 @@ DevFilter::AddDevice(
 		goto Leave;
 	}
 
+	ESL_DBG_OUT(DBG_INFO, "GetDeviceInformation HardwareID %S", HardwareID);
+
 	ClassName = GetDeviceInformation(PDO, DevicePropertyClassName, &ClassNameSize);
 	if (ClassName)
 	{
 		ESL_DBG_OUT(DBG_INFO, "GetDeviceInformation ClassName %S", ClassName);
 	}
 
-	if (!IsDeviceOnList(HardwareID, HardwareIDSize / 2/*, &LearnMode*/))
+	if (!IsDeviceOnList(HardwareID, HardwareIDSize))
 	{
 		goto Leave;
 	}
 
 	ESL_DBG_OUT(DBG_INFO, "Device %S is on list and will %s blocked", HardwareID, "be");
 
-// 	SendAttachDetachMessage(HardwareID, TRUE, LearnMode);
-
-	if (!AttachToDevice(PDO, HardwareID/*, LearnMode*/))
+	if (!AttachToDevice(PDO, HardwareID))
 	{
 		goto Leave;
 	}
@@ -314,10 +310,7 @@ DevFilter::PnPDispatch(
 
 			if (NT_SUCCESS(RetVal) && NT_SUCCESS(Irp->IoStatus.Status))
 			{
-// 				if (!m_LearnMode)
-				{
-					RetVal = STATUS_ACCESS_DENIED;
-				}
+				RetVal = STATUS_ACCESS_DENIED;
 			}
 
 			Irp->IoStatus.Status = RetVal;
@@ -328,7 +321,6 @@ DevFilter::PnPDispatch(
 
 		case IRP_MN_REMOVE_DEVICE:
 		{
-//		 	SendAttachDetachMessage(HardwareID, FALSE, LearnMode);
 			Irp->IoStatus.Status = STATUS_SUCCESS;
 			RetVal = Default_IRP_Dispatcher(Irp);
 
