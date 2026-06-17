@@ -18,7 +18,7 @@
     <ClCompile Include="Precompiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LpcClientLib.cpp">
+    <ClCompile Include="SendToService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClInclude Include="Precompiled.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LpcClientLib.h">
+    <ClInclude Include="SendToService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

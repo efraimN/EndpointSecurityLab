@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2361D8E3-EB39-4C85-BD01-450EFEDFDCCB}</ProjectGuid>
-    <ProjectName>LpcClientUStat</ProjectName>
+    <ProjectGuid>{C17999E7-717E-4894-9366-DC03C86A058C}</ProjectGuid>
+    <ProjectName>SendToServiceUStat</ProjectName>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,7 +71,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LpcClientLib.cpp" />
+    <ClCompile Include="..\SendToServiceK\SendToService.cpp" />
     <ClCompile Include="Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -80,7 +80,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LpcClientLib.h" />
+    <ClInclude Include="..\SendToServiceK\SendToService.h" />
     <ClInclude Include="Precompiled.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

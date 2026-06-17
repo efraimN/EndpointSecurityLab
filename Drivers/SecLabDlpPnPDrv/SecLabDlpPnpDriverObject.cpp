@@ -19,7 +19,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include "SecLabDlpPnPDriverObject.h"
 
 #include "DevFilter\DevFilter.h"
-#include "Messages.h"
+#include <ISendToService.h>
 
 extern "C" PULONG InitSafeBootMode;
 
@@ -39,7 +39,7 @@ NTSTATUS CMyDriverObject::DoStartStop(BOOL Start_Stop)
 
 		status = STATUS_INSUFFICIENT_RESOURCES;
 
-		SendMessages::GetInstance()->Start();
+		ISendToService::GetInstance()->Start();
 		DriverEntryLib::G_DriverObject->DriverExtension->AddDevice = DevFilter::AddDevice;
 
 		status = STATUS_SUCCESS;
@@ -50,7 +50,7 @@ NTSTATUS CMyDriverObject::DoStartStop(BOOL Start_Stop)
 
 	auto Stop = [&]()
 	{
-		SendMessages::GetInstance()->Stop();
+		ISendToService::GetInstance()->Stop();
 	};
 
 	if (*InitSafeBootMode > 0)

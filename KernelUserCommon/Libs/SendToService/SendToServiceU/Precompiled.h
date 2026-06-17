@@ -14,27 +14,8 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #pragma once
 
-#include <ILpcLibServ.h>
-#include <SendToServiceCommon.h>
 
-class MyServerCallbacks : public ILpcServReceiverHandler
-{
-public:
-	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage);
-	virtual VOID HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage);
-};
+#include <GenUserIncludes.h>
 
-
-class MyLpcServer
-{
-public:
-	BOOL Start();
-	BOOL Stop();
-
-	MyLpcServer();
-	~MyLpcServer();
-
-private:
-
-};
+/* TODO: reference additional headers your program requires here */
 

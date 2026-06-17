@@ -60,7 +60,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;SendToServiceU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -83,7 +83,7 @@ echo %COMMAND%
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;SendToServiceU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -106,7 +106,7 @@ echo %COMMAND%
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;SendToServiceU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -129,7 +129,7 @@ echo %COMMAND%
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LpcServerU.lib;LpcClientU.lib;Shlwapi.lib;CliRuntimeLib.lib;Ntdll.lib;UserKernelUtilsU.lib;SendToServiceU.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <CustomBuildStep />

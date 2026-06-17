@@ -13,28 +13,33 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 */
 
 #pragma once
-
-#include <ILpcLibServ.h>
 #include <SendToServiceCommon.h>
 
-class MyServerCallbacks : public ILpcServReceiverHandler
+class ISendToService
 {
 public:
-	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage);
-	virtual VOID HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage);
-};
 
+    static ISendToService* GetInstance();
 
-class MyLpcServer
-{
-public:
-	BOOL Start();
-	BOOL Stop();
+	virtual BOOL Start() = 0;
+	virtual VOID Stop() = 0;
 
-	MyLpcServer();
-	~MyLpcServer();
+	virtual
+	BOOL
+	SendMessage(
+		KernelMessagesToUser MesageType,
+		PMessagesToUser Message,
+		BOOLEAN HasResponse
+	) = 0;
 
+protected:
+	ISendToService() {};
+	~ISendToService() {};
 private:
-
+    // delete copy and move constructors and assign operators
+	ISendToService(ISendToService const&);             // Copy construct
+	ISendToService(ISendToService&&);                  // Move construct
+	ISendToService& operator=(ISendToService const&);  // Copy assign
+	ISendToService& operator=(ISendToService&&);       // Move assign
 };
 

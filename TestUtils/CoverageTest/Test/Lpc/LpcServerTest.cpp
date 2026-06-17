@@ -17,7 +17,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <ILpcLibServ.h>
 
-#include <SecLabServerCommon.h>
+#include <SendToServiceCommon.h>
 
 
 class CLpcTestServerCallbacks : public ILpcServReceiverHandler
