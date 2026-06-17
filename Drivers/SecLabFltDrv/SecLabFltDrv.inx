@@ -1,0 +1,38 @@
+;;;
+;;; SecLabFltDrv
+;;;
+
+[Version]
+Signature   = "$Windows NT$"
+Class       = EpSecLab
+ClassGuid   = {17927B9D-6D0B-4B81-A237-E2CF578D73AC}
+Provider    = %CompanyName%
+PnpLockdown=1
+
+CatalogFile=SecLabFltDrv.cat
+CatalogFile.NTAMD64 = SecLabFltDrv.cat
+ 
+[DestinationDirs]
+DefaultDestDir         = 12
+
+;;
+;; Default install sections
+;;
+
+[DefaultInstall.NTAMD64]
+OptionDesc = %DriverName%
+CopyFiles = DriverCopyFiles
+
+[SourceDisksNames]
+1 = %DiskName%
+
+[DriverCopyFiles]
+SecLabFltDrv.sys
+
+[SourceDisksFiles]
+SecLabFltDrv.sys = 1
+
+[Strings]
+DiskName                    = "SecLabFltDrv Installation Disk"
+CompanyName                 = "Ephraim Neuberger"
+DriverName                  = "SecLabFltDrv"
