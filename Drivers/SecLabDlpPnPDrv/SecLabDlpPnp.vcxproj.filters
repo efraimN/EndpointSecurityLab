@@ -16,11 +16,11 @@
     <Filter Include="Inf">
       <UniqueIdentifier>{87dfbc9d-c7c6-4a93-9923-6008dfe51921}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\DevFilter">
-      <UniqueIdentifier>{dd9c1a26-d01f-465e-a80e-78e2f90e62b9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Inf\x86">
       <UniqueIdentifier>{9b9d7131-0ba8-48d9-ad38-a4694d6fb480}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DevFilter">
+      <UniqueIdentifier>{dd9c1a26-d01f-465e-a80e-78e2f90e62b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,7 +31,7 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="DevFilter\DevFilter.h">
-      <Filter>Source Files\DevFilter</Filter>
+      <Filter>DevFilter</Filter>
     </ClInclude>
     <ClInclude Include="SecLabDlpPnp.h">
       <Filter>Header Files</Filter>
@@ -45,7 +45,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DevFilter\DevFilter.cpp">
-      <Filter>Source Files\DevFilter</Filter>
+      <Filter>DevFilter</Filter>
     </ClCompile>
     <ClCompile Include="SecLabDlpPnp.cpp">
       <Filter>Source Files</Filter>

@@ -13,11 +13,3 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 */
 
 #pragma once
-
-extern BOOLEAN G_ShouldStopWpp;
-
-VOID
-__cdecl
-StopDebuggerTracer(
-	PDRIVER_OBJECT DriverObject
-);

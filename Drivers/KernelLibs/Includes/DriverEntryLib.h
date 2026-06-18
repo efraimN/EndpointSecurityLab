@@ -30,9 +30,9 @@ public:
 	) = 0;
 
 	virtual
-		NTSTATUS DoStartStop(
-			BOOL Start_Stop
-		) = 0;
+	NTSTATUS DoStartStop(
+		BOOL Start_Stop
+	) = 0;
 
 protected:
 	IDriverObject() {};
@@ -51,10 +51,10 @@ public:
 	virtual ~BasicDriverDevice();
 
 	virtual
-		NTSTATUS
-		MajorFunctionDispatcher(
-			IN PIRP Irp
-		) = 0;
+	NTSTATUS
+	MajorFunctionDispatcher(
+		IN PIRP Irp
+	) = 0;
 
 	UINT32 m_Signature;
 	PDEVICE_OBJECT m_pDeviceObject;      // Ptr to the device object

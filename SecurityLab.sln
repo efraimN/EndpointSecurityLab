@@ -44,6 +44,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Includes", "Includes", "{DE0A9CF0-0020-452B-83B9-3E579BE3F8CB}"
 	ProjectSection(SolutionItems) = preProject
 		Drivers\KernelLibs\Includes\DriverEntryLib.h = Drivers\KernelLibs\Includes\DriverEntryLib.h
+		Drivers\KernelLibs\Includes\IBasicMiniFilterLib.h = Drivers\KernelLibs\Includes\IBasicMiniFilterLib.h
 		Drivers\KernelLibs\Includes\KernelCrt.h = Drivers\KernelLibs\Includes\KernelCrt.h
 		Drivers\KernelLibs\Includes\KernelUtilsLib.h = Drivers\KernelLibs\Includes\KernelUtilsLib.h
 		Drivers\KernelLibs\Includes\NtDDKUndoc.h = Drivers\KernelLibs\Includes\NtDDKUndoc.h
@@ -193,6 +194,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SecLabFltDrv", "SecLabFltDrv", "{FD52555B-1D98-4C68-B7B8-2AF5F7149B37}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SecLabFltDrv", "Drivers\SecLabFltDrv\SecLabFltDrv.vcxproj", "{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117} = {6E0048A0-CD20-4C0F-92C1-24150BCF0117}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BasicMiniFilterLib", "BasicMiniFilterLib", "{EF7A16C5-267E-4813-ACC5-1B7A05392CFB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BasicMiniFilterLib", "Drivers\KernelLibs\BasicMiniFilterLib\BasicMiniFilterLib.vcxproj", "{6E0048A0-CD20-4C0F-92C1-24150BCF0117}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -406,6 +414,18 @@ Global
 		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x86.ActiveCfg = Release|Win32
 		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x86.Build.0 = Release|Win32
 		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x86.Deploy.0 = Release|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x64.ActiveCfg = Debug|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x64.Build.0 = Debug|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x64.Deploy.0 = Debug|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x86.ActiveCfg = Debug|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x86.Build.0 = Debug|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x86.Deploy.0 = Debug|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x64.ActiveCfg = Release|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x64.Build.0 = Release|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x64.Deploy.0 = Release|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x86.ActiveCfg = Release|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x86.Build.0 = Release|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -463,6 +483,8 @@ Global
 		{58B2A51C-1B47-4980-893F-FBC734B41E9A} = {8F6551DB-F388-433B-95DA-A25281BB0429}
 		{FD52555B-1D98-4C68-B7B8-2AF5F7149B37} = {DC67A5E0-AD53-47E7-AA00-BB49AF1B38F4}
 		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F} = {FD52555B-1D98-4C68-B7B8-2AF5F7149B37}
+		{EF7A16C5-267E-4813-ACC5-1B7A05392CFB} = {BBF35B00-467C-40FC-B6B6-51E91E300C8F}
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117} = {EF7A16C5-267E-4813-ACC5-1B7A05392CFB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20CA15D3-B74C-496C-A17F-ADC08B83DA55}
