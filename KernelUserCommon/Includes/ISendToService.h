@@ -13,3 +13,33 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 */
 
 #pragma once
+#include <SendToServiceCommon.h>
+
+class ISendToService
+{
+public:
+
+    static ISendToService* GetInstance();
+
+	virtual BOOL Start() = 0;
+	virtual VOID Stop() = 0;
+
+	virtual
+	BOOL
+	SendMessage(
+		KernelMessagesToUser MesageType,
+		PMessagesToUser Message,
+		BOOLEAN HasResponse
+	) = 0;
+
+protected:
+	ISendToService() {};
+	~ISendToService() {};
+private:
+    // delete copy and move constructors and assign operators
+	ISendToService(ISendToService const&);             // Copy construct
+	ISendToService(ISendToService&&);                  // Move construct
+	ISendToService& operator=(ISendToService const&);  // Copy assign
+	ISendToService& operator=(ISendToService&&);       // Move assign
+};
+

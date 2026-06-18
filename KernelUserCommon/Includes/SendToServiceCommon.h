@@ -3,6 +3,8 @@
 
 #define SEC_LAB_SERVER_PORT_NAME L"\\Lpc_SEC_LAB_Port"
 
+#include <LpcLibCommonInc.h>
+
 enum KernelMessagesToUser
 {
 	SecLabTset = 1,

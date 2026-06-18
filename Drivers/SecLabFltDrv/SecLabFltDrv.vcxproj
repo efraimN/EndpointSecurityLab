@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5E907F87-9A9E-4F88-ABFA-591A44662015}</ProjectGuid>
-    <ProjectName>SecLabDlpPnP</ProjectName>
+    <ProjectGuid>{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}</ProjectGuid>
+    <ProjectName>SecLabFltDrv</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
@@ -83,16 +83,16 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ProcessCreationCallBack;ProcessCreationCallBack\ProcessList;ProcessCreationCallBack\EarlyInjection;ImageLoadingCallBack;ImageLoadingCallBack\DllInject;ImageLoadingCallBack\DllLoadProtect;ProfileMgr;FileMiniFilter;Registry;VirtualDisk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;BasicMiniFilterLib.slib;FltMgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;BasicMiniFilterLib.slib;FltMgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;BasicMiniFilterLib.slib;FltMgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Link>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">DriverEntryLib.slib;KernelUtilsLib.slib;KernelCrtLib.slib;UserKernelUtilsK.slib;LpcClientK.slib;SendToServiceK.slib;BasicMiniFilterLib.slib;FltMgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
     <PostBuildEvent />
@@ -100,22 +100,22 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DevFilter\DevFilter.cpp" />
+    <ClCompile Include="MiniFilter\MiniFilter.cpp" />
     <ClCompile Include="Precompiled.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SecLabDlpPnp.cpp" />
-    <ClCompile Include="SecLabDlpPnpDriverObject.cpp" />
+    <ClCompile Include="SecLabFltDrv.cpp" />
+    <ClCompile Include="SecLabFltDrvDriverObject.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DevFilter\DevFilter.h" />
+    <ClInclude Include="MiniFilter\MiniFilter.h" />
     <ClInclude Include="Precompiled.h" />
     <ClInclude Include="Resources\Resource.h" />
-    <ClInclude Include="SecLabDlpPnp.h" />
-    <ClInclude Include="SecLabDlpPnPDriverObject.h" />
+    <ClInclude Include="SecLabFltDrv.h" />
+    <ClInclude Include="SecLabFltDrvDriverObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc1">
@@ -126,11 +126,11 @@
     <None Include="Resources\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="InfX86\SecLabDlpPnp.inx">
+    <Inf Include="InfX86\SecLabFltDrv.inx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Inf>
-    <Inf Include="SecLabDlpPnp.inx">
+    <Inf Include="SecLabFltDrv.inx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </Inf>

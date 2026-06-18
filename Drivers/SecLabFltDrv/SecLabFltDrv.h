@@ -1,7 +1,7 @@
 /*
-Copyright(c) 2026 - present, Ephraim Neuberger.All rights reserved.
+Copyright (c) 2026 - present, Ephraim Neuberger. All rights reserved.
 
-The code and materials provided by Ephraim Neuberger are for non - commercial testing and evaluation purposes only.
+The code and materials provided by Ephraim Neuberger are for non-commercial testing and evaluation purposes only.
 Ephraim Neuberger reserves all rights not expressly granted.
 
 Any permitted copy must retain this copyright notice and disclaimer.
@@ -14,27 +14,3 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #pragma once
 
-#include <ILpcLibClient.h>
-#include <SecLabServerCommon.h>
-
-class SendMessages
-{
-public:
-	static
-		SendMessages* GetInstance();
-
-	BOOL Start();
-	VOID Stop();
-
-	BOOL SendMessage(
-		KernelMessagesToUser MesageType,
-		PMessagesToUser Message,
-		BOOLEAN HasResponse
-	);
-
-private:
-	CLpcClientLibInt* m_Client;
-	BOOL m_Inited;
-	SendMessages();
-	~SendMessages();
-};

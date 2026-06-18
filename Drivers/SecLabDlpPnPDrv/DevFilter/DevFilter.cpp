@@ -16,7 +16,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <WppIncludes.h>
 
 #include "DevFilter.h"
-#include "Messages.h"
+#include "ISendToService.h"
 
 void* __cdecl DevFilter::operator new(size_t nSize, PDRIVER_OBJECT DriverObject, DEVICE_TYPE Type)
 {
@@ -70,7 +70,7 @@ void __cdecl DevFilter::operator delete(void* p)
 	BasicDriverDevice::operator delete(p);
 }
 
-DevFilter::DevFilter(UINT32 Signature, PWCHAR HardwareID, PDEVICE_OBJECT PDO) : BasicDriverDevice(Signature)
+DevFilter::DevFilter(UINT32 Signature, PDEVICE_OBJECT PDO) : BasicDriverDevice(Signature)
 {
 	auto ProcEntry = [](BOOL start)
 	{
@@ -82,7 +82,6 @@ DevFilter::DevFilter(UINT32 Signature, PWCHAR HardwareID, PDEVICE_OBJECT PDO) : 
 	};
 	PROC_ENTRY;
 
-	m_HardwareID = HardwareID;
 	m_PDO = PDO;
 }
 
@@ -98,23 +97,19 @@ DevFilter::~DevFilter()
 	};
 	PROC_ENTRY;
 
-	if (m_HardwareID)
-	{
-		delete[] m_HardwareID;
-	}
 }
 
 // For now this will block any device
 static
 BOOL IsDeviceOnList(PWCHAR HardwareID, ULONG HardwareIDSize)
 {
-// 	*LearnMode = FALSE;
+// 	 TODO add a LearnMode
 	MessagesToUser Message = { 0 };
 	BOOL RetVal = FALSE;
 
 	RtlCopyMemory(Message.Messages.GetLPCBlocStatus.HardwareId, HardwareID, HardwareIDSize);
 
-	if(SendMessages::GetInstance()->SendMessage(
+	if(ISendToService::GetInstance()->SendMessage(
 		GetLpcInBlacList,
 		&Message,
 		TRUE // has response
@@ -129,7 +124,7 @@ BOOL IsDeviceOnList(PWCHAR HardwareID, ULONG HardwareIDSize)
 	return RetVal;
 }
 
-BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID)
+BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO)
 {
 	BOOL RetVal = FALSE;
 	PDEVICE_OBJECT	TopDeviceObject = NULL;
@@ -141,7 +136,7 @@ BOOL DevFilter::AttachToDevice(IN PDEVICE_OBJECT PDO, PWCHAR HardwareID)
 		ObDereferenceObject(TopDeviceObject);
 	}
 
-	pDevFilter = new(DriverEntryLib::G_DriverObject, DeviceType) DevFilter(MY_FILTER_DEVICES_SIGNATURE, HardwareID, PDO);
+	pDevFilter = new(DriverEntryLib::G_DriverObject, DeviceType) DevFilter(MY_FILTER_DEVICES_SIGNATURE, PDO);
 	if (!pDevFilter)
 	{
 		goto Leave;
@@ -200,11 +195,10 @@ DevFilter::AddDevice(
 
 	ESL_DBG_OUT(DBG_INFO, "Device %S is on list and will %s blocked", HardwareID, "be");
 
-	if (!AttachToDevice(PDO, HardwareID))
+	if (!AttachToDevice(PDO))
 	{
 		goto Leave;
 	}
-	HardwareID = NULL; // if AttachToDevice succeeded then the deletion will be later on
 
 Leave:
 	if (ClassName)

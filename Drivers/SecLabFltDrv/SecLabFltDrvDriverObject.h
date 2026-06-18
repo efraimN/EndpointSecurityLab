@@ -13,3 +13,23 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 */
 
 #pragma once
+
+#include <DriverEntryLib.h>
+
+class CMyDriverObject : public IDriverObject
+{
+public:
+	friend IDriverObject;
+	virtual
+	NTSTATUS
+	MajorFunctionDispatcher(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp);
+
+	virtual
+	NTSTATUS DoStartStop(BOOL Start_Stop);
+
+protected:
+private:
+	CMyDriverObject() {};
+	virtual ~CMyDriverObject() {};
+
+};

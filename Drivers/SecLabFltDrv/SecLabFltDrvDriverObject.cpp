@@ -16,9 +16,8 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <WppIncludes.h>
 
 #include <DriverEntryLib.h>
-#include "SecLabDlpPnPDriverObject.h"
+#include "SecLabFltDrvDriverObject.h"
 
-#include "DevFilter\DevFilter.h"
 #include <ISendToService.h>
 
 extern "C" PULONG InitSafeBootMode;
@@ -31,21 +30,21 @@ IDriverObject* IDriverObject::GetInstance()
 
 NTSTATUS CMyDriverObject::DoStartStop(BOOL Start_Stop)
 {
-	NTSTATUS status = STATUS_INSUFFICIENT_RESOURCES;
+	NTSTATUS RetVal = STATUS_INSUFFICIENT_RESOURCES;
 
-	auto Start = [&]()->NTSTATUS
+	auto Start = [&]()->BOOL
 	{
+		RetVal = FALSE;
 		/* Add initialization for each module used */
 
-		status = STATUS_INSUFFICIENT_RESOURCES;
+		if (!ISendToService::GetInstance()->Start())
+		{
+			goto Leave;
+		}
 
-		ISendToService::GetInstance()->Start();
-		DriverEntryLib::G_DriverObject->DriverExtension->AddDevice = DevFilter::AddDevice;
-
-		status = STATUS_SUCCESS;
-		goto Leave;
+		RetVal = TRUE;
 	Leave:
-		return status;
+		return RetVal;
 	};
 
 	auto Stop = [&]()
@@ -60,19 +59,26 @@ NTSTATUS CMyDriverObject::DoStartStop(BOOL Start_Stop)
 
 	if (Start_Stop)
 	{
-		return Start();
+		if (!Start())
+		{
+			Stop();
+			goto Leave;
+		}
 	}
 	else
 	{
 		Stop();
-		return STATUS_SUCCESS;
 	}
+
+	RetVal = STATUS_SUCCESS;
+Leave:
+	return RetVal;
 	 
 }
 
 NTSTATUS
 CMyDriverObject::MajorFunctionDispatcher(
-	IN PDEVICE_OBJECT DeviceObject,
+	IN PDEVICE_OBJECT /*DeviceObject*/,
 	IN PIRP Irp)
 {
 	auto ProcEntry = [](BOOL start)
@@ -85,13 +91,6 @@ CMyDriverObject::MajorFunctionDispatcher(
 	};
 	PROC_ENTRY;
 
-	BasicDriverDevice* pMyDevices;
-
-	pMyDevices = (BasicDriverDevice*)DeviceObject->DeviceExtension;
-	if (pMyDevices->m_Signature == MY_FILTER_DEVICES_SIGNATURE)
-	{
-		return ((DevFilter*)pMyDevices)->MajorFunctionDispatcher(Irp);
-	}
 
 	ESL_DBG_OUT(DBG_ERROR, ("Returning STATUS_INVALID_DEVICE_REQUEST the DeviceObject is invalid"));
 	Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;

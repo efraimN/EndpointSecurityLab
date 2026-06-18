@@ -15,7 +15,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #pragma once
 
 #include <ILpcLibServ.h>
-#include <SecLabServerCommon.h>
+#include <SendToServiceCommon.h>
 
 class MyServerCallbacks : public ILpcServReceiverHandler
 {

@@ -44,6 +44,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Includes", "Includes", "{DE0A9CF0-0020-452B-83B9-3E579BE3F8CB}"
 	ProjectSection(SolutionItems) = preProject
 		Drivers\KernelLibs\Includes\DriverEntryLib.h = Drivers\KernelLibs\Includes\DriverEntryLib.h
+		Drivers\KernelLibs\Includes\IBasicMiniFilterLib.h = Drivers\KernelLibs\Includes\IBasicMiniFilterLib.h
 		Drivers\KernelLibs\Includes\KernelCrt.h = Drivers\KernelLibs\Includes\KernelCrt.h
 		Drivers\KernelLibs\Includes\KernelUtilsLib.h = Drivers\KernelLibs\Includes\KernelUtilsLib.h
 		Drivers\KernelLibs\Includes\NtDDKUndoc.h = Drivers\KernelLibs\Includes\NtDDKUndoc.h
@@ -55,11 +56,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Includes", "Includes", "{15
 	ProjectSection(SolutionItems) = preProject
 		KernelUserCommon\Includes\ILpcLibClient.h = KernelUserCommon\Includes\ILpcLibClient.h
 		KernelUserCommon\Includes\ILpcLibServ.h = KernelUserCommon\Includes\ILpcLibServ.h
+		KernelUserCommon\Includes\ISendToService.h = KernelUserCommon\Includes\ISendToService.h
 		KernelUserCommon\Includes\LpcLibCommonInc.h = KernelUserCommon\Includes\LpcLibCommonInc.h
 		KernelUserCommon\Includes\NtDllFuncInc.h = KernelUserCommon\Includes\NtDllFuncInc.h
 		KernelUserCommon\Includes\NtDllInc.h = KernelUserCommon\Includes\NtDllInc.h
 		KernelUserCommon\Includes\RtlNtIncludes.h = KernelUserCommon\Includes\RtlNtIncludes.h
-		KernelUserCommon\Includes\SecLabServerCommon.h = KernelUserCommon\Includes\SecLabServerCommon.h
+		KernelUserCommon\Includes\SendToServiceCommon.h = KernelUserCommon\Includes\SendToServiceCommon.h
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DriverEntryLib", "Drivers\KernelLibs\DriverEntryLib\DriverEntryLib.vcxproj", "{8C35EC9F-F819-421F-AB36-B4048E94DEE7}"
@@ -124,6 +126,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoverageTest", "CoverageTes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CoverageTest", "TestUtils\CoverageTest\CoverageTest.vcxproj", "{50C922D2-18A3-45AA-9063-D3318CFEB4BD}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E8140B04-ADFB-4121-93F9-80709D23E377} = {E8140B04-ADFB-4121-93F9-80709D23E377}
 		{D89FA31F-C2C1-47EB-B713-BA8C71460967} = {D89FA31F-C2C1-47EB-B713-BA8C71460967}
 		{CEF6D93D-5AD2-406C-88EA-C020BF0C7AA9} = {CEF6D93D-5AD2-406C-88EA-C020BF0C7AA9}
 		{D9D9AAB0-487F-4DC9-9C4E-1FD0949BC1A0} = {D9D9AAB0-487F-4DC9-9C4E-1FD0949BC1A0}
@@ -134,6 +137,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drivers", "Drivers", "{DC67
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SecLabDlpPnP", "Drivers\SecLabDlpPnPDrv\SecLabDlpPnp.vcxproj", "{5E907F87-9A9E-4F88-ABFA-591A44662015}"
 	ProjectSection(ProjectDependencies) = postProject
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A} = {58B2A51C-1B47-4980-893F-FBC734B41E9A}
 		{FED40940-EEDD-4171-B196-59707EB67E3D} = {FED40940-EEDD-4171-B196-59707EB67E3D}
 		{2F81B04A-572B-4C77-A086-6FBBD23B68A1} = {2F81B04A-572B-4C77-A086-6FBBD23B68A1}
 		{8C35EC9F-F819-421F-AB36-B4048E94DEE7} = {8C35EC9F-F819-421F-AB36-B4048E94DEE7}
@@ -174,6 +178,29 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SecLabServ", "UserCommon\Ap
 		{8ACECD1A-FAFF-4DB2-9FD0-7032C0A9A6EC} = {8ACECD1A-FAFF-4DB2-9FD0-7032C0A9A6EC}
 		{D89FA31F-C2C1-47EB-B713-BA8C71460967} = {D89FA31F-C2C1-47EB-B713-BA8C71460967}
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceChannel", "ServiceChannel", "{A3FA2C2C-388F-47ED-9AC4-8A8264F3A905}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SendToServiceK", "SendToServiceK", "{8F6551DB-F388-433B-95DA-A25281BB0429}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SendToServiceU", "SendToServiceU", "{106DB193-C6B6-4860-9E5A-C0FC34FA9090}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SendToServiceU", "KernelUserCommon\Libs\SendToService\SendToServiceU\SendToServiceU.vcxproj", "{E8140B04-ADFB-4121-93F9-80709D23E377}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SendToServiceUStat", "KernelUserCommon\Libs\SendToService\SendToServiceU\SendToServiceUStat.vcxproj", "{C17999E7-717E-4894-9366-DC03C86A058C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SendToServiceK", "KernelUserCommon\Libs\SendToService\SendToServiceK\SendToServiceK.vcxproj", "{58B2A51C-1B47-4980-893F-FBC734B41E9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SecLabFltDrv", "SecLabFltDrv", "{FD52555B-1D98-4C68-B7B8-2AF5F7149B37}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SecLabFltDrv", "Drivers\SecLabFltDrv\SecLabFltDrv.vcxproj", "{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117} = {6E0048A0-CD20-4C0F-92C1-24150BCF0117}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BasicMiniFilterLib", "BasicMiniFilterLib", "{EF7A16C5-267E-4813-ACC5-1B7A05392CFB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BasicMiniFilterLib", "Drivers\KernelLibs\BasicMiniFilterLib\BasicMiniFilterLib.vcxproj", "{6E0048A0-CD20-4C0F-92C1-24150BCF0117}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -347,6 +374,58 @@ Global
 		{C1B68EED-7524-41F8-BB42-084A653ECFC4}.Release|x64.Build.0 = Release|x64
 		{C1B68EED-7524-41F8-BB42-084A653ECFC4}.Release|x86.ActiveCfg = Release|Win32
 		{C1B68EED-7524-41F8-BB42-084A653ECFC4}.Release|x86.Build.0 = Release|Win32
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Debug|x64.ActiveCfg = Debug|x64
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Debug|x64.Build.0 = Debug|x64
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Debug|x86.ActiveCfg = Debug|Win32
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Debug|x86.Build.0 = Debug|Win32
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Release|x64.ActiveCfg = Release|x64
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Release|x64.Build.0 = Release|x64
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Release|x86.ActiveCfg = Release|Win32
+		{E8140B04-ADFB-4121-93F9-80709D23E377}.Release|x86.Build.0 = Release|Win32
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Debug|x64.ActiveCfg = Debug|x64
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Debug|x64.Build.0 = Debug|x64
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Debug|x86.ActiveCfg = Debug|Win32
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Debug|x86.Build.0 = Debug|Win32
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Release|x64.ActiveCfg = Release|x64
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Release|x64.Build.0 = Release|x64
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Release|x86.ActiveCfg = Release|Win32
+		{C17999E7-717E-4894-9366-DC03C86A058C}.Release|x86.Build.0 = Release|Win32
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Debug|x64.ActiveCfg = Debug|x64
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Debug|x64.Build.0 = Debug|x64
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Debug|x64.Deploy.0 = Debug|x64
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Debug|x86.ActiveCfg = Debug|Win32
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Debug|x86.Build.0 = Debug|Win32
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Debug|x86.Deploy.0 = Debug|Win32
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Release|x64.ActiveCfg = Release|x64
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Release|x64.Build.0 = Release|x64
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Release|x64.Deploy.0 = Release|x64
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Release|x86.ActiveCfg = Release|Win32
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Release|x86.Build.0 = Release|Win32
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A}.Release|x86.Deploy.0 = Release|Win32
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Debug|x64.ActiveCfg = Debug|x64
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Debug|x64.Build.0 = Debug|x64
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Debug|x64.Deploy.0 = Debug|x64
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Debug|x86.ActiveCfg = Debug|Win32
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Debug|x86.Build.0 = Debug|Win32
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Debug|x86.Deploy.0 = Debug|Win32
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x64.ActiveCfg = Release|x64
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x64.Build.0 = Release|x64
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x64.Deploy.0 = Release|x64
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x86.ActiveCfg = Release|Win32
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x86.Build.0 = Release|Win32
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F}.Release|x86.Deploy.0 = Release|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x64.ActiveCfg = Debug|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x64.Build.0 = Debug|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x64.Deploy.0 = Debug|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x86.ActiveCfg = Debug|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x86.Build.0 = Debug|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Debug|x86.Deploy.0 = Debug|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x64.ActiveCfg = Release|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x64.Build.0 = Release|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x64.Deploy.0 = Release|x64
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x86.ActiveCfg = Release|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x86.Build.0 = Release|Win32
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -396,6 +475,16 @@ Global
 		{3C17FDBC-C1E7-4F89-B374-EB2C0D55762C} = {8E1418A2-202D-4171-8FFB-D158176F2F81}
 		{8ACECD1A-FAFF-4DB2-9FD0-7032C0A9A6EC} = {3C17FDBC-C1E7-4F89-B374-EB2C0D55762C}
 		{C1B68EED-7524-41F8-BB42-084A653ECFC4} = {54570AF1-0306-4662-84E8-783BFC828499}
+		{A3FA2C2C-388F-47ED-9AC4-8A8264F3A905} = {DFBDE9A9-712D-4F7A-BAB6-1ECD90503BA5}
+		{8F6551DB-F388-433B-95DA-A25281BB0429} = {A3FA2C2C-388F-47ED-9AC4-8A8264F3A905}
+		{106DB193-C6B6-4860-9E5A-C0FC34FA9090} = {A3FA2C2C-388F-47ED-9AC4-8A8264F3A905}
+		{E8140B04-ADFB-4121-93F9-80709D23E377} = {106DB193-C6B6-4860-9E5A-C0FC34FA9090}
+		{C17999E7-717E-4894-9366-DC03C86A058C} = {106DB193-C6B6-4860-9E5A-C0FC34FA9090}
+		{58B2A51C-1B47-4980-893F-FBC734B41E9A} = {8F6551DB-F388-433B-95DA-A25281BB0429}
+		{FD52555B-1D98-4C68-B7B8-2AF5F7149B37} = {DC67A5E0-AD53-47E7-AA00-BB49AF1B38F4}
+		{709A8A68-E877-498A-9DD4-B80AEEBD0F8F} = {FD52555B-1D98-4C68-B7B8-2AF5F7149B37}
+		{EF7A16C5-267E-4813-ACC5-1B7A05392CFB} = {BBF35B00-467C-40FC-B6B6-51E91E300C8F}
+		{6E0048A0-CD20-4C0F-92C1-24150BCF0117} = {EF7A16C5-267E-4813-ACC5-1B7A05392CFB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20CA15D3-B74C-496C-A17F-ADC08B83DA55}

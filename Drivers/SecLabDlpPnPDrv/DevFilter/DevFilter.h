@@ -31,7 +31,7 @@ public:
 
 	virtual NTSTATUS MajorFunctionDispatcher(IN PIRP Irp);
 
-	DevFilter(UINT32 Signature, PWCHAR HardwareID, PDEVICE_OBJECT PDO);
+	DevFilter(UINT32 Signature, PDEVICE_OBJECT PDO);
 	virtual ~DevFilter();
 
 	void* __cdecl operator new(size_t nSize, PDRIVER_OBJECT DriverObject, DEVICE_TYPE Type);
@@ -53,8 +53,7 @@ private:
 	static
 	BOOL
 	AttachToDevice(
-		IN PDEVICE_OBJECT PDO,
-		PWCHAR HardwareID
+		IN PDEVICE_OBJECT PDO
 	);
 
 	virtual
@@ -78,7 +77,6 @@ private:
 		IN UCHAR MinorFunction
 	);
 
-	PWCHAR m_HardwareID;
 	BOOL m_Blocked;
 	//
 	// "THE PDO"  (ejected by the root bus or ACPI)

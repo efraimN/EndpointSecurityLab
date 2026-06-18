@@ -15,26 +15,26 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include "Precompiled.h"
 #include <WppIncludes.h>
 
-#include "Messages.h"
+#include "SendToService.h"
 
 
-SendMessages::SendMessages()
+SendToService::SendToService()
 {
 	m_Client = NULL;
 	m_Inited = FALSE;
 }
 
-SendMessages::~SendMessages()
+SendToService::~SendToService()
 {
 }
 
-SendMessages* SendMessages::GetInstance()
+ISendToService* ISendToService::GetInstance()
 {
-	static SendMessages Singletone;
+	static SendToService Singletone;
 	return &Singletone;
 }
 
-BOOL SendMessages::Start()
+BOOL SendToService::Start()
 {
 	BOOL RetVal = FALSE;
 	m_Client = CLpcClientLibInt::GetNewInstance(TRUE);
@@ -62,7 +62,7 @@ Leave:
 	return TRUE;
 }
 
-VOID SendMessages::Stop()
+VOID SendToService::Stop()
 {
 	if (m_Inited)
 	{
@@ -73,7 +73,7 @@ VOID SendMessages::Stop()
 	}
 }
 
-BOOL SendMessages::SendMessage(
+BOOL SendToService::SendMessage(
 	KernelMessagesToUser MesageType,
 	PMessagesToUser Message,
 	BOOLEAN HasResponse

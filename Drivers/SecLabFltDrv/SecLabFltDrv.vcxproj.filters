@@ -19,9 +19,6 @@
     <Filter Include="Inf\x86">
       <UniqueIdentifier>{9b9d7131-0ba8-48d9-ad38-a4694d6fb480}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DevFilter">
-      <UniqueIdentifier>{dd9c1a26-d01f-465e-a80e-78e2f90e62b9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Precompiled.h">
@@ -30,13 +27,13 @@
     <ClInclude Include="Resources\Resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="DevFilter\DevFilter.h">
-      <Filter>DevFilter</Filter>
-    </ClInclude>
-    <ClInclude Include="SecLabDlpPnp.h">
+    <ClInclude Include="SecLabFltDrv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SecLabDlpPnPDriverObject.h">
+    <ClInclude Include="SecLabFltDrvDriverObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniFilter\MiniFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,13 +41,13 @@
     <ClCompile Include="Precompiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DevFilter\DevFilter.cpp">
-      <Filter>DevFilter</Filter>
-    </ClCompile>
-    <ClCompile Include="SecLabDlpPnp.cpp">
+    <ClCompile Include="SecLabFltDrv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SecLabDlpPnpDriverObject.cpp">
+    <ClCompile Include="SecLabFltDrvDriverObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniFilter\MiniFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,10 +62,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="SecLabDlpPnp.inx">
+    <Inf Include="SecLabFltDrv.inx">
       <Filter>Inf</Filter>
     </Inf>
-    <Inf Include="InfX86\SecLabDlpPnp.inx">
+    <Inf Include="InfX86\SecLabFltDrv.inx">
       <Filter>Inf\x86</Filter>
     </Inf>
   </ItemGroup>
