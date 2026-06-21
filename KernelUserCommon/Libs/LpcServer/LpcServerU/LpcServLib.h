@@ -15,7 +15,12 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #pragma once
 
 #include <ILpcLibServ.h>
-#include <ILinkListLibInt.h>
+
+typedef struct _CientContext
+{
+	HANDLE CommPortHandle; // this client port handle.
+	ULONG_PTR ClientPid;
+}CientContext, * PClientContext;
 
 class CLpcServLibU : public ILpcServLib
 {
@@ -43,16 +48,19 @@ private:
         void *Param
     );
 
-    virtual
     BOOL 
     InitLpcPort(
         PCWCHAR PortName, 
         PHANDLE PortHandle
     );
  
-	virtual VOID LpcServLoop();
+	VOID LpcServLoop();
 
-    virtual VOID RecoverLpcPort();
+    int FindClientSlot(PClientContext ClientContext);
+
+    int FindFreeClientSlot();
+
+    int FindClientSlotByPid(ULONG_PTR ClientPid);
 
 	HANDLE m_hPortLoop; 
 	ILpcServReceiverHandler * m_LpcReceiverCallBacks = NULL;
@@ -61,7 +69,8 @@ private:
 	USHORT m_MaxMessageSize;
 	BOOLEAN m_Use64bitstructs = TRUE;
 
-    PClientContext m_pClientContext;
+	PClientContext m_ClientContexts[10];
+
 
 };
 

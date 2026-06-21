@@ -24,6 +24,8 @@ public:
 	virtual BOOL Start() = 0;
 	virtual VOID Stop() = 0;
 
+	virtual ULONG_PTR GetServerPid() = 0;
+
 	virtual
 	BOOL
 	SendMessage(

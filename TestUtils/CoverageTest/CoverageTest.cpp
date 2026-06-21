@@ -103,17 +103,17 @@ VOID ConVert2DosDev(PCHAR InputFile, PCHAR* Converted2DevPath)
 {
 	CHAR DosDevices[] = "\\DosDevices\\";
 	size_t DosDevicesLenth = ARRAY_SIZE(DosDevices);
-	size_t JsonFileLength;
+	size_t FilePathLength;
 	PCHAR PConvertedTo2DevPath = NULL;
-	JsonFileLength = strlen(InputFile);
-	PConvertedTo2DevPath = new CHAR[JsonFileLength + DosDevicesLenth];
+	FilePathLength = strlen(InputFile);
+	PConvertedTo2DevPath = new CHAR[FilePathLength + DosDevicesLenth];
 	if (!PConvertedTo2DevPath)
 	{
 		return;
 	}
-	ZeroMemory(PConvertedTo2DevPath, JsonFileLength + DosDevicesLenth);
+	ZeroMemory(PConvertedTo2DevPath, FilePathLength + DosDevicesLenth);
 	RtlCopyMemory(PConvertedTo2DevPath, DosDevices, DosDevicesLenth);
-	RtlCopyMemory(&PConvertedTo2DevPath[DosDevicesLenth - 1], InputFile, JsonFileLength);
+	RtlCopyMemory(&PConvertedTo2DevPath[DosDevicesLenth - 1], InputFile, FilePathLength);
 	*Converted2DevPath = PConvertedTo2DevPath;
 }
 

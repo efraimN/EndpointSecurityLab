@@ -17,24 +17,27 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <ISendToService.h>
 #include <ILpcLibClient.h>
 
-
 class SendToService : public ISendToService
 {
 public:
 
 	friend ISendToService;
 
-	BOOL Start();
-	VOID Stop();
+	virtual BOOL Start();
+	virtual VOID Stop();
 
-	BOOL SendMessage(
+	virtual ULONG_PTR GetServerPid();
+
+	virtual
+	BOOL
+	SendMessage(
 		KernelMessagesToUser MesageType,
 		PMessagesToUser Message,
 		BOOLEAN HasResponse
 	);
 
 private:
-	CLpcClientLibInt* m_Client;
+	ILpcClientLib* m_Client;
 	BOOL m_Inited;
 
 	// delete copy and move constructors and assign operators

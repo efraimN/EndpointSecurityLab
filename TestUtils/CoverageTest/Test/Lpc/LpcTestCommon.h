@@ -14,17 +14,13 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #pragma once
 
+#define SEC_LAB_LPC_TEST_PORT_NAME L"\\Sec_Lab_Test_Port"
 
-class ServiceLpcServer
+
+typedef struct _LPC_SEC_LAB_SERVER_MESSAGE64
 {
-public:
-	BOOL Start();
-	BOOL Stop();
+	LPC_BASIC_MESSAGE64 BasicMessage;
+	WCHAR Text[64];
 
-	ServiceLpcServer();
-	~ServiceLpcServer();
-
-private:
-
-};
+} LPC_SEC_LAB_SERVER_MESSAGE64, * PLPC_SEC_LAB_SERVER_MESSAGE64;
 

@@ -20,14 +20,8 @@ class ILpcServReceiverHandler
 {
 public:
 	virtual VOID HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage) = 0;
-	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage) = 0;
+	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage, BOOLEAN ClientAlreadyConnected) = 0;
 };
-
-typedef struct _CientContext
-{
-	HANDLE CommPortHandle; // this client port handle.
-
-}CientContext, *PClientContext;
 
 class ILpcServLib
 {

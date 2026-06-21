@@ -128,12 +128,47 @@ NTZW(CreateFile)(
 
 NTSTATUS
 NTAPI
+NTZW(ReadFile)(
+	_In_ HANDLE FileHandle,
+	_In_opt_ HANDLE Event,
+	_In_opt_ PIO_APC_ROUTINE ApcRoutine,
+	_In_opt_ PVOID ApcContext,
+	_Out_ PIO_STATUS_BLOCK IoStatusBlock,
+	_Out_writes_bytes_(Length) PVOID Buffer,
+	_In_ ULONG Length,
+	_In_opt_ PLARGE_INTEGER ByteOffset,
+	_In_opt_ PULONG Key
+	);
+
+NTSTATUS
+NTAPI
 NTZW(QueryInformationFile)(
 	_In_ HANDLE FileHandle,
 	_Out_ PIO_STATUS_BLOCK IoStatusBlock,
 	_Out_writes_bytes_(Length) PVOID FileInformation,
 	_In_ ULONG Length,
 	_In_ NTFILE_INFORMATION_CLASS FileInformationClass
+	);
+
+NTSTATUS
+NTAPI
+NTZW(DuplicateObject)(
+	_In_ HANDLE SourceProcessHandle,
+	_In_ HANDLE SourceHandle,
+	_In_opt_ HANDLE TargetProcessHandle,
+	_Out_opt_ PHANDLE TargetHandle,
+	_In_ ACCESS_MASK DesiredAccess,
+	_In_ ULONG HandleAttributes,
+	_In_ ULONG Options
+	);
+
+NTSTATUS
+NTAPI
+NTZW(OpenProcess)(
+	_Out_ PHANDLE ProcessHandle,
+	_In_ ACCESS_MASK DesiredAccess,
+	_In_ POBJECT_ATTRIBUTES ObjectAttributes,
+	_In_opt_ PCLIENT_ID ClientId
 	);
 
 NTSTATUS

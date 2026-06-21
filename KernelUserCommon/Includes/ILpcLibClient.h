@@ -16,17 +16,17 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <LpcLibCommonInc.h>
 
-class CLpcClientLibInt
+class ILpcClientLib
 {
 public:
     // delete copy and move constructors and assign operators
-    CLpcClientLibInt(CLpcClientLibInt const&);             // Copy construct
-    CLpcClientLibInt(CLpcClientLibInt&&);                  // Move construct
-    CLpcClientLibInt& operator=(CLpcClientLibInt const&);  // Copy assign
-    CLpcClientLibInt& operator=(CLpcClientLibInt&&);       // Move assign
+    ILpcClientLib(ILpcClientLib const&);             // Copy construct
+    ILpcClientLib(ILpcClientLib&&);                  // Move construct
+    ILpcClientLib& operator=(ILpcClientLib const&);  // Copy assign
+    ILpcClientLib& operator=(ILpcClientLib&&);       // Move assign
 
-    static CLpcClientLibInt* GetNewInstance(BOOLEAN Use64bitstructs);
-	static void FreeInstance(CLpcClientLibInt* Instance);
+    static ILpcClientLib* GetNewInstance(BOOLEAN Use64bitstructs);
+	static void FreeInstance(ILpcClientLib* Instance);
 
 	virtual BOOL Start(
 		PCWCHAR PortName
@@ -34,14 +34,16 @@ public:
 
 	virtual VOID Stop() = 0;
 
+	virtual ULONG_PTR GetServerPid() = 0;
+
 	virtual NTSTATUS SendMessageWaitResponse(
 		PLPC_BASIC_MESSAGE LpcMessage,
 		BOOLEAN WaitResponse
 	) = 0;
 
 protected:
-	CLpcClientLibInt() {};
-	~CLpcClientLibInt() {};
+	ILpcClientLib() {};
+	~ILpcClientLib() {};
 private:
 };
 
