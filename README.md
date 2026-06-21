@@ -13,15 +13,24 @@ This repository contains a reusable Windows endpoint security foundation:
 * NT-style wrappers for code reuse between user mode and kernel mode
 * CLI runtime and command-table generator
 * command-driven test utilities
-* initial DLP-oriented device control driver
+* DLP-oriented device control driver
+* DLP-oriented file-system minifilter driver
 
-## Current Module
+## Current Modules
 
 ### SecLabDlp
 
-`SecLabDlp` is the first driver module in the lab.
+`SecLabDlp` is an existing driver module in the lab.
 
-It focuses on DLP-oriented device control/admission logic and uses the shared kernel/user infrastructure provided by the repository.
+It implements DLP-oriented USB device control/admission logic and demonstrates endpoint policy enforcement at the device-access level.
+
+### SecLabFltDrv
+
+`SecLabFltDrv` is an existing file-system minifilter module in the lab.
+
+It implements DLP-oriented file-open inspection and can block open/create operations for files that contain data, based on policy decisions returned by the user-mode service.
+
+Both modules use the shared kernel/user infrastructure provided by the repository.
 
 ## Design Notes
 
@@ -37,7 +46,6 @@ Future modules may include:
 * ETW-based telemetry
 
 **Control / enforcement**
-* file-system minifilter
 * WFP/network filtering
 * application control
 * injected user-mode sensors
