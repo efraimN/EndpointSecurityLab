@@ -17,16 +17,18 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <ILpcLibClient.h>
 
 
-class CLpcClientLibU : public CLpcClientLibInt
+class CLpcClientLibU : public ILpcClientLib
 {
 public:
 
-	friend class CLpcClientLibInt;
+	friend class ILpcClientLib;
 	virtual BOOL Start(
 		PCWCHAR PortName
 	);
 
     virtual VOID Stop();
+
+	virtual ULONG_PTR GetServerPid();
 
 	virtual NTSTATUS SendMessageWaitResponse(
 		PLPC_BASIC_MESSAGE LpcMessage,
@@ -42,5 +44,7 @@ private:
 	HANDLE m_PortHandle;
 	USHORT m_PortMessageSize;
 	BOOLEAN m_Use64bitstructs;
+
+	ULONG_PTR m_ServerPid;
 };
 

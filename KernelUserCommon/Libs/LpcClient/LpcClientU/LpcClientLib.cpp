@@ -18,11 +18,8 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include "LpcClientLib.h"
 
 
-CLpcClientLibInt* CLpcClientLibInt::GetNewInstance(BOOLEAN Use64bitstructs)
+ILpcClientLib* ILpcClientLib::GetNewInstance(BOOLEAN Use64bitstructs)
 {
-
-
-
 	return
 #ifdef _NTDDK_
 		new('lpCL')
@@ -32,7 +29,7 @@ CLpcClientLibInt* CLpcClientLibInt::GetNewInstance(BOOLEAN Use64bitstructs)
 		CLpcClientLibU(Use64bitstructs);
 }
 
-void CLpcClientLibInt::FreeInstance(CLpcClientLibInt* Instance)
+void ILpcClientLib::FreeInstance(ILpcClientLib* Instance)
 {
 	delete (CLpcClientLibU*)Instance;
 }
@@ -42,6 +39,7 @@ CLpcClientLibU::CLpcClientLibU(BOOLEAN Use64bitstructs)
 	m_Use64bitstructs = Use64bitstructs;
 	m_PortHandle = NULL;
 	m_PortMessageSize = 0;
+	m_ServerPid = 0;
 }
 
 CLpcClientLibU::~CLpcClientLibU()
@@ -56,8 +54,9 @@ BOOL CLpcClientLibU::Start(
 	BOOL RetVal = FALSE;
 	NTSTATUS status;
 	UNICODE_STRING UPortName;
-	DWORD ConnectionInformation = 0xDEADBEEF;
-	ULONG ConnectionInformationLength = sizeof(DWORD);
+	CONNECT_INFO ConnectionInformation;
+	ConnectionInformation.Magic = 0xDEADBEEF;
+	ULONG ConnectionInformationLength = sizeof(CONNECT_INFO);
 	DWORD MaxPortMessageSize;
 
 	static SECURITY_QUALITY_OF_SERVICE DefaultSQos =
@@ -91,12 +90,13 @@ BOOL CLpcClientLibU::Start(
 		}
 		goto Leave;
 	}
-	if ((!ConnectionInformation) || (0xCAFEDEAD != ConnectionInformation))
+	if ((0xCAFEDEAD != ConnectionInformation.Magic))
 	{
         ESL_DBG_OUT(DBG_ERROR, "Returned bad data closing");
 		goto Leave;
 	}
 
+	m_ServerPid = ConnectionInformation.ServerPid;
 	m_PortMessageSize =(USHORT) MaxPortMessageSize;
     RetVal = TRUE;
 
@@ -164,4 +164,9 @@ VOID CLpcClientLibU::Stop()
 		ZwClose(m_PortHandle);
 		m_PortHandle = NULL;
 	}
+}
+
+ULONG_PTR CLpcClientLibU::GetServerPid()
+{
+	return m_ServerPid;
 }

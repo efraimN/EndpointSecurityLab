@@ -65,5 +65,8 @@
     <ClCompile Include="Test\Lpc\LpcServerTest.cpp">
       <Filter>Test\Lpc</Filter>
     </ClCompile>
+    <ClCompile Include="Test\SendToServiceTest.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

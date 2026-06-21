@@ -30,7 +30,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 BOOL g_IsService = TRUE;
 SecLabService g_SecLabServiceInstance;
 
-MyLpcServer pMyLpcServer;
+ServiceLpcServer pMyLpcServer;
 
 int _stdcall WinMain(
 	HINSTANCE /*hInstance*/,

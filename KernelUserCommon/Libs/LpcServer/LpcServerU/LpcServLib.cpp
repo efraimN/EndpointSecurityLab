@@ -31,8 +31,6 @@ Optionally allow AcceptConnect to initialize a server-defined per-client context
 
 #include "LpcServLib.h"
 
-using namespace  UserKernelUtilsLib;
-
 #include <process.h>
 #include <intrin.h>
 
@@ -52,7 +50,7 @@ CLpcServLibU::CLpcServLibU(BOOLEAN Use64bitstructs)
 	m_Use64bitstructs = Use64bitstructs;
 	m_hPortLoop = NULL;
 	m_ConnectionHandle = NULL;
-	m_pClientContext = NULL;
+	RtlZeroMemory(m_ClientContexts, sizeof(m_ClientContexts));
 }
 
 CLpcServLibU::~CLpcServLibU()
@@ -120,11 +118,14 @@ VOID CLpcServLibU::Stop()
 		m_ConnectionHandle = NULL;
 	}
 
-	if (m_pClientContext)
+	for(UINT i = 0;i< ARRAY_SIZE(m_ClientContexts);i++)
 	{
-		ZwClose(m_pClientContext->CommPortHandle);
-		delete m_pClientContext;
-		m_pClientContext = NULL;
+		if (m_ClientContexts[i])
+		{
+			ZwClose(m_ClientContexts[i]->CommPortHandle);
+			delete m_ClientContexts[i];
+			m_ClientContexts[i] = NULL;
+		}
 	}
 }
 
@@ -172,8 +173,25 @@ unsigned WINAPI CLpcServLibU::LpcServLoop(void *Param)
 	return 0;
 }
 
-VOID CLpcServLibU::RecoverLpcPort()
+ULONG_PTR GetServerPid()
 {
+	PROCESS_BASIC_INFORMATION pbi = {};
+	ULONG retLen = 0;
+
+	NTSTATUS status = NtQueryInformationProcess(
+		NtCurrentProcess(),
+		ProcessBasicInformation,
+		&pbi,
+		sizeof(pbi),
+		&retLen
+	);
+
+	if (NT_SUCCESS(status))
+	{
+		return pbi.UniqueProcessId;
+	}
+
+	return 0;
 }
 
 VOID CLpcServLibU::LpcServLoop()
@@ -185,7 +203,7 @@ VOID CLpcServLibU::LpcServLoop()
 	BOOLEAN Accept;
 	char * Buff = NULL;
 	PPORT_MESSAGE Message = NULL;
-	DWORD *ConnectionInformation;
+	PCONNECT_INFO ConnectionInformation;
 	PUSHORT MessageType;
 
 	for (;;)
@@ -251,26 +269,42 @@ VOID CLpcServLibU::LpcServLoop()
 			{
 				HANDLE CommPortHandle;
 				PClientContext pClientContext;
+				int ClientSlot;
+				ULONG_PTR ClientPid;
+
 				CommPortHandle = NULL;
-				if (m_pClientContext)
+
+				if (m_Use64bitstructs)
 				{
-					ESL_DBG_OUT(DBG_ERROR, "Already conected to client");
+					ClientPid = (ULONG_PTR)((PLPC_BASIC_MESSAGE64)Message)->MessageHeader.ClientId.UniqueProcess;
+				}
+				else
+				{
+					ClientPid = (ULONG_PTR)((PLPC_BASIC_MESSAGE32)Message)->MessageHeader.ClientId.UniqueProcess;
+				}
+				
+				ClientSlot = FindFreeClientSlot();
+				if (ClientSlot < 0)
+				{
+					ESL_DBG_OUT(DBG_ERROR, "No free LPC client slots");
 					Accept = FALSE;
 				}
 				else
 				{
 					if (m_LpcReceiverCallBacks)
 					{
-						Accept = m_LpcReceiverCallBacks->AcceptConnect((PLPC_BASIC_MESSAGE)Message);
+						BOOLEAN ClientAlreadyConnected =
+							FindClientSlotByPid(ClientPid) >= 0;
+						Accept = m_LpcReceiverCallBacks->AcceptConnect((PLPC_BASIC_MESSAGE)Message, ClientAlreadyConnected);
 					}
 					else
 					{
 						ESL_DBG_OUT(DBG_ERROR, "No LPC Callback");
 						Accept = FALSE;
 					}
-					if (*ConnectionInformation != 0xDEADBEEF)
+					if (ConnectionInformation->Magic != 0xDEADBEEF)
 					{
-						ESL_DBG_OUT(DBG_ERROR, "ConnectMessage received Data is not DEADBEEF 0x%X failing connection", (UINT)*ConnectionInformation);
+						ESL_DBG_OUT(DBG_ERROR, "ConnectMessage received Data is not DEADBEEF 0x%X failing connection", (UINT)ConnectionInformation->Magic);
 						Accept = FALSE;
 					}
 				}
@@ -281,7 +315,8 @@ VOID CLpcServLibU::LpcServLoop()
 
 				pClientContext = new CientContext();
 
-				*ConnectionInformation = 0xCAFEDEAD;
+				ConnectionInformation->Magic = 0xCAFEDEAD;
+				ConnectionInformation->ServerPid = GetServerPid();
 
 				status = ZwAcceptConnectPort(
 					&CommPortHandle,
@@ -309,6 +344,8 @@ VOID CLpcServLibU::LpcServLoop()
 					break;
 				}
 				pClientContext->CommPortHandle = CommPortHandle;
+				pClientContext->ClientPid = ClientPid;
+
 				status = ZwCompleteConnectPort(CommPortHandle);
 				if (!NT_SUCCESS(status))
 				{
@@ -317,7 +354,7 @@ VOID CLpcServLibU::LpcServLoop()
 					delete pClientContext;
 					break;
 				}
-				m_pClientContext = pClientContext;
+				m_ClientContexts[ClientSlot] = pClientContext;
 			}
 			break;
 			case LPC_PORT_CLOSED:
@@ -325,9 +362,18 @@ VOID CLpcServLibU::LpcServLoop()
 				if (Context)
 				{
 					PClientContext pClientContext = (PClientContext)Context;
-					ZwClose(pClientContext->CommPortHandle);
-					delete pClientContext;
-					m_pClientContext = NULL;
+					int ClientSlot = FindClientSlot(pClientContext);
+
+					if (ClientSlot >= 0)
+					{
+						ZwClose(pClientContext->CommPortHandle);
+						delete pClientContext;
+						m_ClientContexts[ClientSlot] = NULL;
+					}
+					else
+					{
+						ESL_DBG_OUT(DBG_ERROR, "LPC_PORT_CLOSED with unknown client context");
+					}
 				}
 			}
 			break;
@@ -366,4 +412,44 @@ Leave:
 	}
 
 	RtlSetLastWin32Error(ERROR_SUCCESS);
+}
+
+int CLpcServLibU::FindFreeClientSlot()
+{
+	for (int i = 0; i < _countof(m_ClientContexts); i++)
+	{
+		if (!m_ClientContexts[i])
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+int CLpcServLibU::FindClientSlot(PClientContext ClientContext)
+{
+	for (int i = 0; i < _countof(m_ClientContexts); i++)
+	{
+		if (m_ClientContexts[i] == ClientContext)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+int CLpcServLibU::FindClientSlotByPid(ULONG_PTR ClientPid)
+{
+	for (int i = 0; i < _countof(m_ClientContexts); i++)
+	{
+		if (m_ClientContexts[i] &&
+			m_ClientContexts[i]->ClientPid == ClientPid)
+		{
+			return i;
+		}
+	}
+
+	return -1;
 }

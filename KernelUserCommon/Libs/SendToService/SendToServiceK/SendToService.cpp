@@ -37,7 +37,7 @@ ISendToService* ISendToService::GetInstance()
 BOOL SendToService::Start()
 {
 	BOOL RetVal = FALSE;
-	m_Client = CLpcClientLibInt::GetNewInstance(TRUE);
+	m_Client = ILpcClientLib::GetNewInstance(TRUE);
 	if (!m_Client)
 	{
 		ESL_DBG_OUT(DBG_ERROR, "LpcClientTest GetNewInstance failed");
@@ -53,21 +53,25 @@ BOOL SendToService::Start()
 	ESL_DBG_OUT(DBG_INFO, "LpcClientTest client started");
 
 	RetVal = TRUE;
-	m_Inited = TRUE;
 Leave:
+	m_Inited = TRUE;
 	if (!RetVal)
 	{
 		Stop();
+		m_Inited = FALSE;
 	}
-	return TRUE;
+	return RetVal;
 }
 
 VOID SendToService::Stop()
 {
 	if (m_Inited)
 	{
-		m_Client->Stop();
-		CLpcClientLibInt::FreeInstance(m_Client);
+		if (m_Client)
+		{
+			m_Client->Stop();
+			ILpcClientLib::FreeInstance(m_Client);
+		}
 		m_Inited = FALSE;
 		m_Client = NULL;
 	}
@@ -79,7 +83,12 @@ BOOL SendToService::SendMessage(
 	BOOLEAN HasResponse
 )
 {
-	Message->MesageType = MesageType;
+	if (!m_Inited)
+	{
+		return FALSE;
+	}
+
+	Message->UserMessage.MesageType = MesageType;
 	if(!NT_SUCCESS (m_Client->SendMessageWaitResponse(
 		(PLPC_BASIC_MESSAGE)Message,
 		HasResponse
@@ -90,4 +99,14 @@ BOOL SendToService::SendMessage(
 
 	return TRUE;
 }
+
+ULONG_PTR SendToService::GetServerPid()
+{
+	if (!m_Inited)
+	{
+		return 0;
+	}
+	return m_Client->GetServerPid();
+}
+
 

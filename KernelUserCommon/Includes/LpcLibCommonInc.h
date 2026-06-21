@@ -5,6 +5,11 @@ extern "C"
 {
 #endif
 
+	typedef struct _CONNECT_INFO {
+		ULONG Magic;
+		ULONG_PTR ServerPid;
+	}CONNECT_INFO, *PCONNECT_INFO;
+
 	typedef struct _LPC_BASIC_MESSAGE32
 	{
 		PORT_MESSAGE32 MessageHeader;
@@ -17,7 +22,7 @@ extern "C"
 	typedef struct _CONNECT_MESSAGE32
 	{
 		PORT_MESSAGE32 MessageHeader;
-		DWORD ConnectionInformation;
+		CONNECT_INFO ConnectionInformation;
 	}CONNECT_MESSAGE32, *PCONNECT_MESSAGE32;
 
 	typedef struct _LPC_BASIC_MESSAGE64
@@ -32,7 +37,7 @@ extern "C"
 	typedef struct _CONNECT_MESSAGE64
 	{
 		PORT_MESSAGE64 MessageHeader;
-		DWORD ConnectionInformation;
+		CONNECT_INFO ConnectionInformation;
 	}CONNECT_MESSAGE64, *PCONNECT_MESSAGE64;
 
 	typedef struct _LPC_BASIC_MESSAGE *PLPC_BASIC_MESSAGE;

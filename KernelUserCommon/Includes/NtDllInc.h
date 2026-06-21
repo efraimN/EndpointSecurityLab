@@ -162,6 +162,8 @@ typedef enum _EVENT_TYPE {
 	SynchronizationEvent
 } EVENT_TYPE;
 
+#define DUPLICATE_SAME_ATTRIBUTES   0x00000004
+
 #endif // NOT _NTDK_
 
 #ifdef _NTDDK_

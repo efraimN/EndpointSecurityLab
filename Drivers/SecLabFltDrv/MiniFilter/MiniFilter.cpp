@@ -17,6 +17,8 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include "MiniFilter.h"
 #include <DriverEntryLib.h>
+#include <ISendToService.h>
+
 
 NTSTATUS FltGetFileName(
 	_In_ PFLT_CALLBACK_DATA Data,
@@ -26,6 +28,18 @@ NTSTATUS FltGetFileName(
 NTSTATUS GetSidStringFromToken(
 	_In_ PACCESS_TOKEN Token,
 	_Out_ PUNICODE_STRING SidString
+);
+
+NTSTATUS FltGetFileHandle(
+	IN  PCFLT_RELATED_OBJECTS FltObjects,
+	IN  PUNICODE_STRING FileName,
+	IN  HANDLE TargetProcess,
+	OUT PHANDLE FileHandle
+);
+
+NTSTATUS GetProcessHandle(
+	IN  HANDLE ProcessId,
+	OUT PHANDLE ProcessHandle
 );
 
 extern "C" extern PULONG InitSafeBootMode;
@@ -182,6 +196,23 @@ MiniFilter::FilterPostCreate(
 	FLT_POST_OPERATION_FLAGS Flags
 )
 {
+	return MiniFilter::GetInstance()->_FilterPostCreate(
+		Data,
+		FltObjects,
+		CompletionContext,
+		Flags
+	);
+}
+
+FLT_POSTOP_CALLBACK_STATUS
+FLTAPI
+MiniFilter::_FilterPostCreate(
+	PFLT_CALLBACK_DATA       Data,
+	PCFLT_RELATED_OBJECTS    FltObjects,
+	PVOID                    CompletionContext,
+	FLT_POST_OPERATION_FLAGS Flags
+)
+{
 	UNREFERENCED_PARAMETER(CompletionContext);
 
 	NTSTATUS status;
@@ -241,10 +272,6 @@ MiniFilter::FilterPostCreate(
 		goto Leave;
 	}
 
-	/* If we are not connected then do nothing */
-
-	/* If the originator is our service then do nothing */
-
 	// TODO: DO NOT USE Data->Thread to identify the user (vulnerable to impersonation bypass).
 	// Use the security Token (SubjectContext) instead.
 	// Note: If the RPC server does not impersonate, the token will reflect SYSTEM; to capture the 
@@ -281,7 +308,8 @@ MiniFilter::FilterPostCreate(
 
 
 	// TODO use the FileInternInformation.IndexNumber.QuadPart to identify files that are protected. 
-	// We can add the to a list of ID at DriverEntry
+	// We can add them to a list of ID at DriverEntry
+	// Also add them to a list as already checked, and update as necesary if the file is modified
 // 
 // 	FILE_INTERNAL_INFORMATION FileInternInformation;
 // 	FileInternInformation.IndexNumber.QuadPart = FILE_INVALID_FILE_ID;
@@ -327,11 +355,20 @@ MiniFilter::FilterPostCreate(
 
 	if (0 == FileInformation.EndOfFile.QuadPart)
 	{
-		ESL_DBG_OUT(DBG_INFO, "file %wZ is zero sized ignoring", &FileName);
+// 		ESL_DBG_OUT(DBG_INFO, "file %wZ is zero sized ignoring", &FileName);
 		goto Leave;
 	}
 
-	//TODO call user mode
+	if (!ShouldStopRead(FltObjects, &FileName, &OriginalUserSid))
+	{
+// 		ESL_DBG_OUT(DBG_INFO, "file %wZ is Ok ignoring", &FileName);
+		goto Leave;
+	}
+
+	ESL_DBG_OUT(DBG_INFO, "file %wZ is is in proteccion", &FileName);
+	FltCancelFileOpen(FltObjects->Instance, FltObjects->FileObject);
+	Data->IoStatus.Information = 0;
+	Data->IoStatus.Status = STATUS_ACCESS_DENIED;
 
 Leave:
 
@@ -345,6 +382,75 @@ Leave:
 }
 
 
+//////////////////////////////////////////////////////////////////////////
+// TODO add this to a send messages cpp or class
+BOOL MiniFilter::ShouldStopRead(
+	PCFLT_RELATED_OBJECTS    FltObjects,
+	PUNICODE_STRING FileName,
+	PUNICODE_STRING OriginalUserSid
+)
+{
+	BOOL RetVal = FALSE;
+	ISendToService* Client;
+	ULONG_PTR  ServerPid;
+	HANDLE ServerProcHandle = NULL;
+	MessagesToUser Message;
+	PGet_Open_File_Veredict pGetOpenFileVeredict;
+	HANDLE FileHandle = NULL;
+
+	RtlZeroMemory(&Message, sizeof(Message));
+
+	pGetOpenFileVeredict = &Message.UserMessage.Messages.GetOpenFileVeredict;
+
+	Client = ISendToService::GetInstance();
+	if (!Client->Start())
+	{
+		ESL_DBG_OUT(DBG_ERROR, "SendToService Start Failed");
+		goto Leave;
+	}
+// 	ESL_DBG_OUT(DBG_INFO,  "SendToService started");
+
+	ServerPid = Client->GetServerPid();
+
+	if (!NT_SUCCESS(GetProcessHandle((HANDLE)ServerPid, &ServerProcHandle)))
+	{
+		ESL_DBG_OUT(DBG_ERROR, "GetProcessHandle Failed for processes pid %lld", ServerPid);
+		goto Leave;
+	}
+
+	if (!NT_SUCCESS(FltGetFileHandle(
+		FltObjects,
+		FileName,
+		ServerProcHandle,
+		&FileHandle
+	)))
+	{
+		ESL_DBG_OUT(DBG_ERROR, "FltGetFileHandle Failed for file %S", FileName->Buffer);
+		goto Leave;
+	}
+
+	pGetOpenFileVeredict->FileHandle = (ULONG64)FileHandle;
+	wcscpy(pGetOpenFileVeredict->SidString, OriginalUserSid->Buffer);
+
+	if (!Client->SendMessage(
+		GetOpenFileVeredictMessage,
+		&Message,
+		TRUE
+	))
+	{
+		ESL_DBG_OUT(DBG_ERROR, "SendToService SendMessage Failed");
+		goto Leave;
+	}
+
+	RetVal = pGetOpenFileVeredict->ShouldBlock;
+Leave:
+	Client->Stop();
+	if (ServerProcHandle)
+	{
+		ZwClose(ServerProcHandle);
+	}
+	return RetVal;
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -402,8 +508,8 @@ CaptureUnicodeString(
 	}
 
 	DestinationString->MaximumLength =
-		DestinationString->Length + sizeof(UNICODE_NULL);
-	DestinationString->Buffer = new('RTSU') WCHAR[DestinationString->MaximumLength];
+		DestinationString->Length + sizeof(WCHAR);
+	DestinationString->Buffer = new('RTSU') WCHAR[DestinationString->MaximumLength / sizeof(WCHAR)];
 
 	if (!DestinationString->Buffer)
 		return STATUS_INSUFFICIENT_RESOURCES;
@@ -523,6 +629,13 @@ NTSTATUS FltGetFileHandle(
 	HANDLE SystemProcessFileHandle = NULL;
 	HANDLE OrigHandle = NULL;
 
+	status = _FileHandle(FltObjects, FileName, &OrigHandle);
+
+	if (!NT_SUCCESS(status))
+	{
+		goto Leave;
+	}
+
 	ObOpenObjectByPointer(
 		PsInitialSystemProcess,
 		OBJ_KERNEL_HANDLE,
@@ -532,13 +645,6 @@ NTSTATUS FltGetFileHandle(
 		KernelMode,
 		&SystemProcessFileHandle
 	);
-
-	status = _FileHandle(FltObjects, FileName, &OrigHandle);
-
-	if (!NT_SUCCESS(status))
-	{
-		goto Leave;
-	}
 
 	status = ZwDuplicateObject(
 		SystemProcessFileHandle,
@@ -562,3 +668,25 @@ Leave:
 
 	return status;
 }
+
+NTSTATUS GetProcessHandle(
+	IN  HANDLE ProcessId,
+	OUT PHANDLE ProcessHandle
+)
+{
+	OBJECT_ATTRIBUTES objAttr = { 0 };
+	CLIENT_ID clientId = { 0 };
+
+	InitializeObjectAttributes(&objAttr, NULL, 0, NULL, NULL);
+
+	clientId.UniqueProcess = ProcessId;
+	clientId.UniqueThread = NULL;
+
+	return ZwOpenProcess(
+		ProcessHandle,
+		PROCESS_DUP_HANDLE,
+		&objAttr,
+		&clientId
+	);
+}
+

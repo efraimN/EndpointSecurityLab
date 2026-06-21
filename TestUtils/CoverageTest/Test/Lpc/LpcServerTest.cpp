@@ -17,13 +17,13 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 
 #include <ILpcLibServ.h>
 
-#include <SendToServiceCommon.h>
+#include "LpcTestCommon.h"
 
 
 class CLpcTestServerCallbacks : public ILpcServReceiverHandler
 {
 public:
-	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage)
+	virtual BOOLEAN AcceptConnect(PLPC_BASIC_MESSAGE PortMessage, BOOLEAN /*ClientAlreadyConnected*/)
 	{
 		PLPC_BASIC_MESSAGE64 Message = (PLPC_BASIC_MESSAGE64)PortMessage;
 		UINT PID;
@@ -37,24 +37,25 @@ public:
 
 	virtual VOID HandleDataRequest(PLPC_BASIC_MESSAGE PortMessage)
 	{
-		PMessagesToUser Message = (PMessagesToUser)PortMessage;
-		KernelMessagesToUser MesageType;
-		MesageType = Message->MesageType;
+		PLPC_SEC_LAB_SERVER_MESSAGE64 LPCSecLabServerMessage = (PLPC_SEC_LAB_SERVER_MESSAGE64)PortMessage;
 
-		printf("LPC server received message: %d", MesageType);
+		PWCHAR MessageText;
 
-		{
-			PWCHAR MessageText;
-			MessageText = Message->Messages.LPCSecLabServerMessage.Text;
+		MessageText = LPCSecLabServerMessage->Text;
 
-			printf("LPC server received message: %S\n", MessageText);
-			wsprintfW(MessageText, L"Response from LPC server your process id is %d",
-				(UINT)Message->BasicMessage.MessageHeader.ClientId.UniqueProcess);
-		}
-
+		printf("LPC server received message: %S\n", MessageText);
+		wsprintfW(MessageText, L"Response from LPC server your process id is %d",
+			(UINT)LPCSecLabServerMessage->BasicMessage.MessageHeader.ClientId.UniqueProcess);
 	}
 };
 
+void WaitToFinish()
+{
+	printf("Press any key to exit\n\n");
+	_getch();
+}
+
+decltype(WaitToFinish)* G_WaitToFinish = WaitToFinish;
 
 /*!
 Usage:
@@ -79,8 +80,8 @@ int TEST_FUNCTION LpcServerTest()
 
 	if (!pILpcServLib->Start(
 		&MyCLpcTestServerCallbacks,
-		SIZE_OF_LCP_MESSAGE,
-		SEC_LAB_SERVER_PORT_NAME))
+		sizeof(LPC_SEC_LAB_SERVER_MESSAGE64),
+		SEC_LAB_LPC_TEST_PORT_NAME))
 	{
 		printf("LpcServerTest Start failed\n");
 		goto Leave;;
@@ -88,8 +89,7 @@ int TEST_FUNCTION LpcServerTest()
 
 	printf("LpcServerTest server started\n");
 
-	printf("Press any key to exit\n\n");
-	_getch();
+	G_WaitToFinish();
 
 	RetVal = 0;
 Leave:
@@ -103,3 +103,30 @@ Leave:
 	return RetVal;
 }
 
+extern int LpcClientTest();
+
+/*!
+Usage:
+CoverageTest LpcLoopbackTest
+
+Do not use
+
+for debug purposes
+
+*/
+int TEST_FUNCTION LpcLoopbackTest()
+{
+	auto RunClientTest = []()
+	{
+		printf("Loopback mode: server started, continuing to client test\n\n");
+		Sleep(1000);
+		LpcClientTest();
+	};
+
+
+	G_WaitToFinish = RunClientTest;
+
+	LpcServerTest();
+
+	return 0;
+}

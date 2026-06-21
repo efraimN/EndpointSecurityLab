@@ -159,6 +159,7 @@ echo %COMMAND%
     <ClCompile Include="Test\Lpc\LpcServerTest.cpp" />
     <ClCompile Include="Test\MultiStringUtilsTest.cpp" />
     <ClCompile Include="Test\RegUtilsTest.cpp" />
+    <ClCompile Include="Test\SendToServiceTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Precompiled.h" />

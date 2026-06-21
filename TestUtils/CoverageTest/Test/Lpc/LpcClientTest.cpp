@@ -16,8 +16,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 #include <WppIncludes.h>
 
 #include <ILpcLibClient.h>
-
-#include <SendToServiceCommon.h>
+#include "LpcTestCommon.h"
 
 /*!
 Usage:
@@ -31,56 +30,59 @@ for debug purposes
 int TEST_FUNCTION LpcClientTest()
 {
 	NTSTATUS status;
-	LPC_SEC_LAB_SERVER_MESSAGE64 Message;
-	CLpcClientLibInt* Client;
+	LPC_SEC_LAB_SERVER_MESSAGE64 LPCSecLabServerMessage;
+	ILpcClientLib* Client;
 
-	RtlZeroMemory(&Message, sizeof(Message));
-
-	Client = CLpcClientLibInt::GetNewInstance(TRUE);
+	Client = ILpcClientLib::GetNewInstance(TRUE);
 	if (!Client)
 	{
 		printf("LpcClientTest GetNewInstance failed\n");
 		return -1;
 	}
 
-	if (!Client->Start(SEC_LAB_SERVER_PORT_NAME))
+	if (!Client->Start(SEC_LAB_LPC_TEST_PORT_NAME))
 	{
 		printf("LpcClientTest Start failed\n");
-		CLpcClientLibInt::FreeInstance(Client);
+		ILpcClientLib::FreeInstance(Client);
 		return -2;
 	}
 
 	printf("LpcClientTest client started\n");
 
-	wcscpy_s(Message.Text, L"Hello from LPC client message 1");
+	RtlZeroMemory(&LPCSecLabServerMessage, sizeof(LPC_SEC_LAB_SERVER_MESSAGE64));
+	wcscpy_s(LPCSecLabServerMessage.Text, L"Hello from LPC client message 1");
 	status = Client->SendMessageWaitResponse(
-		(PLPC_BASIC_MESSAGE)&Message,
+		(PLPC_BASIC_MESSAGE)&LPCSecLabServerMessage,
 		FALSE
 	);
-
 	if (!NT_SUCCESS(status))
 	{
 		printf("LpcClientTest SendMessageWaitResponse async failed\n");
 	}
+	else
+	{
+		printf("LpcClientTest SendMessageWaitResponse sync succeed\n\n");
+	}
 
-	printf("LpcClientTest SendMessageWaitResponse sync succeed\n\n");
-
-	wcscpy_s(Message.Text, L"Hello from LPC client message 2");
+	RtlZeroMemory(&LPCSecLabServerMessage, sizeof(LPC_SEC_LAB_SERVER_MESSAGE64));
+	wcscpy_s(LPCSecLabServerMessage.Text, L"Hello from LPC client message 2");
 	status = Client->SendMessageWaitResponse(
-		(PLPC_BASIC_MESSAGE)&Message,
+		(PLPC_BASIC_MESSAGE)&LPCSecLabServerMessage,
 		TRUE
 	);
-
 	if (!NT_SUCCESS(status))
 	{
 		printf("LpcClientTest SendMessageWaitResponse sync failed\n");
 	}
+	else
+	{
+		printf("LpcClientTest SendMessageWaitResponse sync received message:\n%S\n\n",
+			LPCSecLabServerMessage.Text);
+	}
 
-	printf("LpcClientTest SendMessageWaitResponse sync received message:\n%S\n\n",
-		Message.Text);
 
 	Client->Stop();
-	CLpcClientLibInt::FreeInstance(Client);
+	ILpcClientLib::FreeInstance(Client);
 
 	return NT_SUCCESS(status) ? 0 : (int)status;
 }

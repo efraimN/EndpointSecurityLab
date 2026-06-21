@@ -46,6 +46,16 @@ private:
 		FLT_POST_OPERATION_FLAGS Flags
 		);
 
+	FLT_POSTOP_CALLBACK_STATUS
+	FLTAPI
+	_FilterPostCreate(
+		PFLT_CALLBACK_DATA       Data,
+		PCFLT_RELATED_OBJECTS    FltObjects,
+		PVOID                    CompletionContext,
+		FLT_POST_OPERATION_FLAGS Flags
+	);
+
+
 	static
 	FLT_PREOP_CALLBACK_STATUS
 	FLTAPI 
@@ -53,6 +63,12 @@ private:
 		PFLT_CALLBACK_DATA Data,
 		PCFLT_RELATED_OBJECTS FltObjects,
 		PVOID*
+	);
+
+	BOOL ShouldStopRead(
+		PCFLT_RELATED_OBJECTS    FltObjects,
+		PUNICODE_STRING FileName,
+		PUNICODE_STRING OriginalUserSid
 	);
 
 	static

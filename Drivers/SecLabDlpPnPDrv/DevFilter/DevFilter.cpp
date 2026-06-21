@@ -107,15 +107,15 @@ BOOL IsDeviceOnList(PWCHAR HardwareID, ULONG HardwareIDSize)
 	MessagesToUser Message = { 0 };
 	BOOL RetVal = FALSE;
 
-	RtlCopyMemory(Message.Messages.GetLPCBlocStatus.HardwareId, HardwareID, HardwareIDSize);
+	RtlCopyMemory(Message.UserMessage.Messages.GetUsbBlocStatus.HardwareId, HardwareID, HardwareIDSize);
 
 	if(ISendToService::GetInstance()->SendMessage(
-		GetLpcInBlacList,
+		GetUsbBlocStatusMessage,
 		&Message,
 		TRUE // has response
 	))
 	{
-		if (Message.Messages.GetLPCBlocStatus.ShouldBlock)
+		if (Message.UserMessage.Messages.GetUsbBlocStatus.ShouldBlock)
 		{
 			RetVal = TRUE;
 		}
